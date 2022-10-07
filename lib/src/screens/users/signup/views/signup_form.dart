@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gamble/src/screens/users/signin/bloc/signin_bloc.dart';
+import 'package:gamble/src/screens/users/signup/bloc/signup_bloc.dart';
 // ignore: depend_on_referenced_packages
 import 'package:formz/formz.dart';
 
-class SignInForm extends StatelessWidget {
-  const SignInForm({Key? key}) : super(key: key);
+class SignUpForm extends StatelessWidget {
+  const SignUpForm({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +33,8 @@ class SignInForm extends StatelessWidget {
                         fontSize: 20,
                         color: Color.fromRGBO(255, 255, 255, 1),
                         fontWeight: FontWeight.w600)),
-                const SignInPhone(),
-                const SignInPassword(),
+                const SignUpPhone(),
+                const SignUpPassword(),
                 SizedBox(
                   child: Row(
                     children: <Widget>[
@@ -74,7 +74,7 @@ class SignInForm extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SignInButton(),
+                const SignUpButton(),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -112,18 +112,18 @@ class SignInForm extends StatelessWidget {
   }
 }
 
-class SignInPhone extends StatelessWidget {
-  const SignInPhone({super.key});
+class SignUpPhone extends StatelessWidget {
+  const SignUpPhone({super.key});
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double ratio = size.width / size.height;
-    return BlocBuilder<SignInBloc, SignInState>(
+    return BlocBuilder<SignUpBloc, SignUpState>(
         buildWhen: (previous, current) => previous.phone != current.phone,
         builder: (context, state) {
           return TextField(
-              key: const Key('SignInForm_phoneInput_phoneField'),
+              key: const Key('SignUpForm_phoneInput_phoneField'),
               keyboardType: TextInputType.phone,
               style: const TextStyle(color: Color.fromRGBO(255, 255, 255, 1)),
               decoration: InputDecoration(
@@ -168,25 +168,25 @@ class SignInPhone extends StatelessWidget {
                       borderSide: BorderSide(
                           color: Color.fromRGBO(218, 62, 59, 1), width: 1))),
               onChanged: (phone) =>
-                  context.read<SignInBloc>().add(SignInPhoneChanged(phone)));
+                  context.read<SignUpBloc>().add(SignUpPhoneChanged(phone)));
         });
   }
 }
 
-class SignInPassword extends StatelessWidget {
-  const SignInPassword({super.key});
+class SignUpPassword extends StatelessWidget {
+  const SignUpPassword({super.key});
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double ratio = size.width / size.height;
-    return BlocBuilder<SignInBloc, SignInState>(
+    return BlocBuilder<SignUpBloc, SignUpState>(
         buildWhen: (previous, current) =>
             previous.password != current.password ||
             previous.showPassword != current.showPassword,
         builder: (context, state) {
           return TextField(
-              key: const Key('SignInForm_passwordInput_textField'),
+              key: const Key('SignUpForm_passwordInput_textField'),
               obscureText: state.showPassword,
               style: const TextStyle(color: Color.fromRGBO(255, 255, 255, 1)),
               decoration: InputDecoration(
@@ -203,8 +203,8 @@ class SignInPassword extends StatelessWidget {
                   suffixIcon: GestureDetector(
                     onTap: () {
                       context
-                          .read<SignInBloc>()
-                          .add(SignInShowPasswordChanged(state.showPassword));
+                          .read<SignUpBloc>()
+                          .add(SignUpShowPasswordChanged(state.showPassword));
                     },
                     child: Icon(
                       state.showPassword
@@ -248,20 +248,20 @@ class SignInPassword extends StatelessWidget {
                       borderSide: BorderSide(
                           color: Color.fromRGBO(218, 62, 59, 1), width: 1))),
               onChanged: (password) => context
-                  .read<SignInBloc>()
-                  .add(SignInPasswordChanged(password)));
+                  .read<SignUpBloc>()
+                  .add(SignUpPasswordChanged(password)));
         });
   }
 }
 
-class SignInButton extends StatelessWidget {
-  const SignInButton({super.key});
+class SignUpButton extends StatelessWidget {
+  const SignUpButton({super.key});
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double ratio = size.width / size.height;
-    return BlocBuilder<SignInBloc, SignInState>(
+    return BlocBuilder<SignUpBloc, SignUpState>(
         buildWhen: (previous, current) => previous.status != current.status,
         builder: (context, state) {
           return SizedBox(
@@ -273,11 +273,11 @@ class SignInButton extends StatelessWidget {
                         const Color.fromRGBO(233, 132, 41, 1)),
                     shape: MaterialStateProperty.all(RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(ratio * 50)))),
-                key: const Key('SignInForm_continue_raisedButton'),
+                key: const Key('SignUpForm_continue_raisedButton'),
                 onPressed: state.status == FormzStatus.valid
                     ? () {
                         print("CLick me");
-                        context.read<SignInBloc>().add(const SignInSubmitted());
+                        context.read<SignUpBloc>().add(const SignUpSubmitted());
                       }
                     : null,
                 child: Text('Sigin In'.toUpperCase(),

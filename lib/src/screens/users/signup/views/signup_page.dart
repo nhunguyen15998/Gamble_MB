@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gamble/src/screens/users/authentications/bloc/authentication_bloc.dart';
-import 'package:gamble/src/screens/users/signin/signin.dart';
+import 'package:gamble/src/screens/users/signup/signup.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gamble/src/services/authentications/authentication_service.dart';
 
-class SignIn extends StatelessWidget {
-  const SignIn({Key? key}) : super(key: key);
+class SignUp extends StatelessWidget {
+  const SignUp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class SignIn extends StatelessWidget {
                                 Colors.black.withOpacity(0.6),
                                 BlendMode.dstATop))),
                     child: BlocProvider(
-                        create: (context) => SignInBloc(
+                        create: (context) => SignUpBloc(
                             authenticationBloc, authenticationService),
                         child: Stack(
                           children: <Widget>[
@@ -48,7 +48,7 @@ class SignIn extends StatelessWidget {
                                     child: Image.asset(
                                         'lib/assets/images/logo.png'),
                                   ),
-                                  SignInForm()
+                                  SignUpForm()
                                 ]),
                           ],
                         ))))));

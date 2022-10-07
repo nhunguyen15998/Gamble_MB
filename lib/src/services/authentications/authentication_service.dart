@@ -3,6 +3,8 @@ import 'package:gamble/src/screens/users/models/model.dart';
 abstract class AuthenticationService {
   Future<User?> getCurrentUser();
   Future<User> signInAction(String phone, String password);
+  Future<User> signUpAction(String firstName, String lastName, String email,
+      String phone, String password, String confirmedPassword);
   Future<void>? signOut();
 }
 
@@ -17,6 +19,16 @@ class FakeAuthenticationService extends AuthenticationService {
     await Future.delayed(
         const Duration(seconds: 1)); // simulate a network delay
 
+    if (phone.toLowerCase() != '0849345639' || password != '123456') {
+      throw Exception('Wrong username or password');
+    }
+    return User(name: 'Nguyễn Thị Như', email: phone);
+  }
+
+  @override
+  Future<User> signUpAction(String firstName, String lastName, String email,
+      String phone, String password, String confirmedPassword) async {
+    await Future.delayed(const Duration(seconds: 1));
     if (phone.toLowerCase() != '0849345639' || password != '123456') {
       throw Exception('Wrong username or password');
     }
