@@ -7,6 +7,8 @@ import 'package:gamble/src/screens/users/signin/bloc/signin_bloc.dart';
 // ignore: depend_on_referenced_packages
 import 'package:formz/formz.dart';
 
+import '../../signup/views/signup_page.dart';
+
 class SignInForm extends StatelessWidget {
   const SignInForm({Key? key}) : super(key: key);
 
@@ -27,7 +29,7 @@ class SignInForm extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Text("Welcome".toUpperCase(),
+                Text("Sign In".toUpperCase(),
                     style: const TextStyle(
                         fontFamily: "Play",
                         fontSize: 20,
@@ -85,7 +87,9 @@ class SignInForm extends StatelessWidget {
                             fontSize: ratio * 40,
                             color: const Color.fromRGBO(255, 255, 255, 1))),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(context, '/signup');
+                      },
                       child: Text("Register",
                           style: TextStyle(
                               fontFamily: "Play",
@@ -280,7 +284,7 @@ class SignInButton extends StatelessWidget {
                         context.read<SignInBloc>().add(const SignInSubmitted());
                       }
                     : null,
-                child: Text('Sigin In'.toUpperCase(),
+                child: Text('Sign In'.toUpperCase(),
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: ratio * 40,

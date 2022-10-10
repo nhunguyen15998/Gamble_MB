@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gamble/src/screens/home/home.dart';
 import 'package:gamble/src/screens/users/authentications/authentication.dart';
-import 'package:gamble/src/screens/users/signin/views/Sigin.dart';
+import 'package:gamble/src/screens/users/signin/views/signin.dart';
+import 'package:gamble/src/screens/users/signup/views/signup.dart';
 import 'package:gamble/src/services/authentications/authentication_service.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,6 +42,11 @@ class Gameble extends StatelessWidget {
         }
         return const SignIn();
       }),
+      initialRoute: '/',
+      routes: {
+        '/signin': (context) => const SignIn(),
+        '/signup': (context) => const SignUp(type: 1),
+      },
     );
   }
 }
