@@ -3,7 +3,7 @@ import 'package:formz/formz.dart';
 
 enum PhoneValidationError { 
   empty, 
-  invalid
+  invalidFormat
 }
 
 class Phone extends FormzInput<String, PhoneValidationError> {
@@ -12,12 +12,12 @@ class Phone extends FormzInput<String, PhoneValidationError> {
 
   @override
   PhoneValidationError? validator(String value) {
-    if (value.isEmpty || value.length != 10) {
+    if (value.isEmpty) {
       return PhoneValidationError.empty;
     }
     final regex = RegExp(r"^[0][3|5|7|8|9][0-9]{8}$");
-    if(regex.hasMatch(value)){
-      return PhoneValidationError.invalid;
+    if(!regex.hasMatch(value)){
+      return PhoneValidationError.invalidFormat;
     }
     return null;
   }

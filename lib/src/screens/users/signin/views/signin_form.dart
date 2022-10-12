@@ -7,6 +7,7 @@ import 'package:gamble/src/screens/users/signin/bloc/signin_bloc.dart';
 // ignore: depend_on_referenced_packages
 import 'package:formz/formz.dart';
 
+import '../../signin/models/phone.dart';
 import '../../signup/views/signup_page.dart';
 
 class SignInForm extends StatelessWidget {
@@ -119,6 +120,22 @@ class SignInForm extends StatelessWidget {
 class SignInPhone extends StatelessWidget {
   const SignInPhone({super.key});
 
+  String? getErrorMsg(Phone phone){
+    print(phone.invalid);
+    String msg = '';
+    if(phone.invalid){
+      switch (phone.error!.index) {
+        case 0:
+          msg = 'Phone is required';
+          break;
+        case 1:
+          msg = 'Invalid phone format';
+          break;
+      }
+    }
+    return msg != '' ? msg : null;
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -132,8 +149,7 @@ class SignInPhone extends StatelessWidget {
               style: const TextStyle(color: Color.fromRGBO(255, 255, 255, 1)),
               decoration: InputDecoration(
                   labelText: 'Phone number',
-                  errorText:
-                      state.phone.invalid ? 'Please enter phone number!' : null,
+                  errorText: getErrorMsg(state.phone),
                   labelStyle: TextStyle(
                     fontSize: ratio * 35,
                     color: const Color.fromRGBO(255, 255, 255, 1),
@@ -196,7 +212,7 @@ class SignInPassword extends StatelessWidget {
               decoration: InputDecoration(
                   labelText: 'Password',
                   errorText:
-                      state.password.invalid ? 'Please enter password!' : null,
+                      state.password.invalid ? 'Password is required' : null,
                   labelStyle: TextStyle(
                       fontSize: ratio * 35,
                       color: const Color.fromRGBO(255, 255, 255, 1),

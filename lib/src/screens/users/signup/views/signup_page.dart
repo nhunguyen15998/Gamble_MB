@@ -36,30 +36,26 @@ class SignUp extends StatelessWidget {
             ),
             child: BlocProvider(
               create: (context) => SignUpBloc(authenticationBloc, authenticationService),
-              child: ListView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Center(
-                        child: Image.asset('lib/assets/images/logo.png'),
-                      ),
-                      if (type == 1) ...[
-                        const SignUpFormA()
-                      ] else if(type == 2)...[
-                        const SignUpFormB()
-                      ] 
-                      else ...[
-                        const SignUpFormC()
-                      ]
-                    ]
-                  )
-                ],
+                  Center(
+                    child: Image.asset('lib/assets/images/logo.png'),
+                  ),
+                  if (type == 1) ...[
+                    const SignUpFormA()
+                  ] else if(type == 2)...[
+                    const SignUpFormB()
+                  ] 
+                  else ...[
+                    const SignUpFormC()
+                  ]
+                ]
               )
             )
-          ),
-        )
+          )
+        ),
       )
     );
   }

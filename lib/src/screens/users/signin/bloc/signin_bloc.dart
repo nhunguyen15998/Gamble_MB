@@ -28,10 +28,12 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     Emitter<SignInState> emit,
   ) {
     final phone = Phone.dirty(event.phone);
+    var isvalid = Formz.validate([phone, state.password]);
     emit(state.copyWith(
       phone: phone,
-      status: Formz.validate([state.password, phone]),
-    ));
+      status: isvalid,
+      )
+    );
   }
 
   void _mapPasswordChangedToState(

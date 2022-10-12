@@ -33,15 +33,15 @@ class Gameble extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-          primarySwatch: Colors.blue, scaffoldBackgroundColor: Colors.white),
-      home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-          builder: (context, state) {
-        if (state is AuthenticationAuthenticated) {
-          return const Home();
-        }
-        return const SignIn();
-      }),
+      theme: ThemeData(primarySwatch: Colors.blue, scaffoldBackgroundColor: Colors.white),
+      home: //BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          //builder: (context, state) {
+        //if (state is AuthenticationAuthenticated) {
+          //return 
+          const Home(),
+        //}
+        //return const SignIn();
+      //}),
       initialRoute: '/',
       routes: {
         '/signin': (context) => const SignIn(),

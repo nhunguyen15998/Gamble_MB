@@ -19,38 +19,39 @@ class SignIn extends StatelessWidget {
     final authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light,
-        child: Scaffold(
-            body: SingleChildScrollView(
-                child: Container(
-                    padding: EdgeInsets.only(top: ratio * 300),
-                    width: size.width,
-                    height: size.height,
-                    decoration: BoxDecoration(
-                        color: Colors.purple,
-                        image: DecorationImage(
-                            image: const AssetImage(
-                                "lib/assets/images/xyz-bg.png"),
-                            fit: BoxFit.cover,
-                            colorFilter: ColorFilter.mode(
-                                Colors.black.withOpacity(0.6),
-                                BlendMode.dstATop))),
-                    child: BlocProvider(
-                        create: (context) => SignInBloc(
-                            authenticationBloc, authenticationService),
-                        child: Stack(
-                          children: <Widget>[
-                            Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Center(
-                                    child: Image.asset(
-                                        'lib/assets/images/logo.png'),
-                                  ),
-                                  SignInForm()
-                                ]),
-                          ],
-                        ))))));
+      value: SystemUiOverlayStyle.light,
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.only(top: ratio * 300),
+            width: size.width,
+            height: size.height,
+            decoration: BoxDecoration(
+              color: Colors.purple,
+              image: DecorationImage(
+                image: const AssetImage("lib/assets/images/xyz-bg.png"),
+                fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.6), BlendMode.dstATop))),
+            child: BlocProvider(
+              create: (context) => SignInBloc(authenticationBloc, authenticationService),
+              child: Stack(
+                children: <Widget>[
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Center(
+                        child: Image.asset('lib/assets/images/logo.png'),
+                      ),
+                      SignInForm()
+                    ]
+                  ),
+                ],
+              )
+            )
+          )
+        )
+      )
+    );
   }
 }
