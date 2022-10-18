@@ -7,10 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gamble/src/services/authentications/authentication_service.dart';
 
 class SignUp extends StatelessWidget {
-  const SignUp({Key? key, required this.type}) : super(key: key);
+  const SignUp({Key? key}) : super(key: key);
   
-  final int type;
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -36,22 +34,32 @@ class SignUp extends StatelessWidget {
             ),
             child: BlocProvider(
               create: (context) => SignUpBloc(authenticationBloc, authenticationService),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Center(
-                    child: Image.asset('lib/assets/images/logo.png'),
-                  ),
-                  if (type == 1) ...[
-                    const SignUpFormA()
-                  ] else if(type == 2)...[
-                    const SignUpFormB()
-                  ] 
-                  else ...[
-                    const SignUpFormC()
-                  ]
-                ]
+              child: Stack(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Center(
+                        child: Image.asset('lib/assets/images/logo.png'),
+                      ),
+                      BlocBuilder<SignUpBloc, SignUpState>(
+                        buildWhen: (previous, current) => previous.step != current.step,
+                        builder: (context, state) {
+                          Widget component = const SignUpFormA();
+                          if (state.step == 1){
+                            component = const SignUpFormA();
+                          } else if(state.step == 2) {
+                            component = const SignUpFormB();
+                          } else {
+                            component = const SignUpFormC();
+                          }
+                          return component;
+                        }
+                      )
+                    ]
+                  )
+                ],
               )
             )
           )

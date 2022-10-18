@@ -11,7 +11,8 @@ class SignUpState extends Equatable {
       this.showPassword = true,
       this.confirmedPassword = const ConfirmedPassword.pure(),
       this.showConfirmedPassword = true,
-      this.error = ''});
+      this.error = '',
+      this.step = 1});
 
   final FormzStatus status;
   final FirstName firstName;
@@ -23,6 +24,7 @@ class SignUpState extends Equatable {
   final ConfirmedPassword confirmedPassword;
   final bool showConfirmedPassword;
   final String error;
+  final int step;
 
   SignUpState copyWith(
       {FormzStatus? status,
@@ -34,7 +36,8 @@ class SignUpState extends Equatable {
       bool? showPassword,
       ConfirmedPassword? confirmedPassword,
       bool? showConfirmedPassword,
-      String? error}) {
+      String? error,
+      int? step}) {
     return SignUpState(
         status: status ?? this.status,
         firstName: firstName ?? this.firstName,
@@ -46,7 +49,8 @@ class SignUpState extends Equatable {
         confirmedPassword: confirmedPassword ?? this.confirmedPassword,
         showConfirmedPassword:
             showConfirmedPassword ?? this.showConfirmedPassword,
-        error: error ?? this.error);
+        error: error ?? this.error,
+        step: step ?? this.step);
   }
 
   @override
@@ -60,6 +64,7 @@ class SignUpState extends Equatable {
         showPassword,
         confirmedPassword,
         showConfirmedPassword,
-        error
+        error,
+        step
       ];
 }

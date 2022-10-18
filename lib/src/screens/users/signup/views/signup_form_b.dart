@@ -20,7 +20,7 @@ class SignUpFormB extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(bottom: 18, top: size.height * 0.1),
       child: Container(
-        height: size.height,
+        height: size.height * 0.6,
         width: double.infinity,
         margin: const EdgeInsets.all(10),
         decoration: BoxDecoration(color: Colors.white.withOpacity(0.0)),
@@ -98,9 +98,9 @@ class SignUpPhone extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double ratio = size.width / size.height;
-    return BlocBuilder<SignUpBloc, SignUpState>(
-      buildWhen: (previous, current) => previous.phone != current.phone,
-      builder: (context, state) {
+    // return BlocBuilder<SignUpBloc, SignUpState>(
+    //   buildWhen: (previous, current) => previous.phone != current.phone,
+    //   builder: (context, state) {
         return Padding(
           padding: const EdgeInsets.only(bottom: 20),
           child: TextField(
@@ -109,8 +109,8 @@ class SignUpPhone extends StatelessWidget {
           style: const TextStyle(color: Color.fromRGBO(255, 255, 255, 1)),
           decoration: InputDecoration(
             labelText: 'Phone number',
-            errorText:
-                state.phone.invalid ? 'Please enter phone number!' : null,
+            // errorText:
+            //     state.phone.invalid ? 'Please enter phone number!' : null,
             labelStyle: TextStyle(
               fontSize: ratio * 35,
               color: const Color.fromRGBO(255, 255, 255, 1),
@@ -152,8 +152,8 @@ class SignUpPhone extends StatelessWidget {
               context.read<SignUpBloc>().add(SignUpPhoneChanged(phone))
           )
         );
-      }
-    );
+    //   }
+    // );
   }
 }
 /* End phone */
@@ -166,9 +166,9 @@ class SignUpEmail extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double ratio = size.width / size.height;
-    return BlocBuilder<SignUpBloc, SignUpState>(
-      buildWhen: (previous, current) => previous.email != current.email,
-      builder: (context, state) {
+    // return BlocBuilder<SignUpBloc, SignUpState>(
+    //   buildWhen: (previous, current) => previous.email != current.email,
+    //   builder: (context, state) {
         return Padding(
           padding: const EdgeInsets.only(bottom: 20),
           child: TextField(
@@ -182,7 +182,7 @@ class SignUpEmail extends StatelessWidget {
                 color: const Color.fromRGBO(255, 255, 255, 1),
                 fontFamily: "Play"
               ),
-              errorText: state.email.invalid ? '' : null,
+              //errorText: state.email.invalid ? '' : null,
               errorStyle: const TextStyle(color: Color.fromRGBO(255, 255, 255, 1)),
               contentPadding: const EdgeInsets.all(0),
               filled: true,
@@ -224,8 +224,8 @@ class SignUpEmail extends StatelessWidget {
           )
         );
       }
-    );
-  }
+  //   );
+  // }
 }
 /* End email */
 
@@ -237,9 +237,9 @@ class SignUpBtnBackB extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double ratio = size.width / size.height;
-    return BlocBuilder<SignUpBloc, SignUpState>(
-      buildWhen: (previous, current) => previous.status != current.status,
-      builder: (context, state) {
+    // return BlocBuilder<SignUpBloc, SignUpState>(
+    //   buildWhen: (previous, current) => previous.status != current.status,
+    //   builder: (context, state) {
         return Padding(
           padding: const EdgeInsets.only(top: 30, bottom: 20),
           child: SizedBox(
@@ -255,7 +255,7 @@ class SignUpBtnBackB extends StatelessWidget {
               onPressed: 
                   () {
                       print("Click me");
-                      Navigator.pop(context);
+                      context.read<SignUpBloc>().add(const SignUpStepChanged(1));
                     },
               child: Text('Back'.toUpperCase(),
                   style: TextStyle(
@@ -266,8 +266,8 @@ class SignUpBtnBackB extends StatelessWidget {
           )
         );
       }
-    );
-  }
+  //   );
+  // }
 }
 /* Btn back */
 
@@ -279,9 +279,9 @@ class SignUpBtnNextB extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double ratio = size.width / size.height;
-    return BlocBuilder<SignUpBloc, SignUpState>(
-      buildWhen: (previous, current) => previous.status != current.status,
-      builder: (context, state) {
+    // return BlocBuilder<SignUpBloc, SignUpState>(
+    //   buildWhen: (previous, current) => previous.status != current.status,
+    //   builder: (context, state) {
         return Padding(
           padding: const EdgeInsets.only(top: 30, bottom: 20),
           child: SizedBox(
@@ -297,7 +297,7 @@ class SignUpBtnNextB extends StatelessWidget {
               onPressed: //state.status == FormzStatus.valid
                    () {
                       print("Click me");
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const SignUp(type: 3)));
+                      context.read<SignUpBloc>().add(const SignUpStepChanged(3));
                     },
                   //: null,
               child: Text('Next'.toUpperCase(),
@@ -309,7 +309,7 @@ class SignUpBtnNextB extends StatelessWidget {
           )
         );
       }
-    );
-  }
+  //   );
+  // }
 }
 /* Btn next */

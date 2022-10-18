@@ -1,3 +1,6 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,31 +28,11 @@ class _HomeState extends State<Home> {
     ];
 
     final PageController blogController = PageController(viewportFraction: 0.45);
-
+    
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: Scaffold(
         backgroundColor: const Color.fromRGBO(31, 6, 68, 1),
-        appBar: AppBar(
-          leading: IconButton(
-            focusColor: const Color.fromRGBO(250, 0, 159, 1),
-            icon: const Icon(FontAwesomeIcons.bars),
-            onPressed: () {
-              
-            },
-          ),
-          title: Image.asset('lib/assets/images/logo.png', height: size.height * 0.03),
-          backgroundColor: const Color.fromRGBO(62, 29, 117, 1),
-          actions: <Widget>[
-            IconButton(
-              focusColor: const Color.fromRGBO(250, 0, 159, 1),
-              icon: const Icon(FontAwesomeIcons.user),
-              onPressed: () {
-                
-              },
-            ),
-          ],
-        ),
         body: SingleChildScrollView(
           child: Stack(
             children: <Widget>[
@@ -370,8 +353,8 @@ class _HomeState extends State<Home> {
                                           borderRadius: BorderRadius.all(Radius.circular(50)),
                                           borderSide: BorderSide( color: Color.fromRGBO(231, 140, 53, 1), width: 1)
                                         ),
-                                        suffixIcon: GestureDetector(
-                                          onTap: () {
+                                        suffixIcon: ElevatedButton(
+                                          onPressed: () {
                                           
                                           },
                                           child: Container(

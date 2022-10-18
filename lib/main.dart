@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gamble/src/screens/home/home.dart';
+import 'package:gamble/src/screens/master/views/master.dart';
 import 'package:gamble/src/screens/users/authentications/authentication.dart';
+import 'package:gamble/src/screens/users/profile/profile.dart';
+import 'package:gamble/src/screens/users/profile/views/profile_change_password.dart';
+import 'package:gamble/src/screens/users/profile/views/profile_edit.dart';
+import 'package:gamble/src/screens/users/profile/views/profile_notification.dart';
+import 'package:gamble/src/screens/users/profile/views/profile_security.dart';
 import 'package:gamble/src/screens/users/signin/views/signin.dart';
 import 'package:gamble/src/screens/users/signup/views/signup.dart';
 import 'package:gamble/src/services/authentications/authentication_service.dart';
@@ -38,15 +44,17 @@ class Gameble extends StatelessWidget {
           //builder: (context, state) {
         //if (state is AuthenticationAuthenticated) {
           //return 
-          const Home(),
+          //const ProfileSecurity(),
+          const Master(index: 0,),
         //}
         //return const SignIn();
       //}),
       initialRoute: '/',
       routes: {
         '/signin': (context) => const SignIn(),
-        '/signup': (context) => const SignUp(type: 1),
+        '/signup': (context) => const SignUp(),
       },
     );
   }
 }
+ 

@@ -20,7 +20,7 @@ class SignUpFormC extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(bottom: 18, top: size.height * 0.1),
       child: Container(
-        height: size.height,
+        height: size.height * 0.6,
         width: double.infinity,
         margin: const EdgeInsets.all(10),
         decoration: BoxDecoration(color: Colors.white.withOpacity(0.0)),
@@ -98,21 +98,21 @@ class SignUpPassword extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double ratio = size.width / size.height;
-    return BlocBuilder<SignUpBloc, SignUpState>(
-        buildWhen: (previous, current) =>
-            previous.password != current.password ||
-            previous.showPassword != current.showPassword,
-        builder: (context, state) {
+    // return BlocBuilder<SignUpBloc, SignUpState>(
+    //     buildWhen: (previous, current) =>
+    //         previous.password != current.password ||
+    //         previous.showPassword != current.showPassword,
+    //     builder: (context, state) {
           return Padding(
           padding: const EdgeInsets.only(bottom: 20),
           child: TextField(
             key: const Key('SignUpFormC_passwordInput_passwordField'),
-            obscureText: state.showPassword,
+            // obscureText: state.showPassword,
             style: const TextStyle(color: Color.fromRGBO(255, 255, 255, 1)),
             decoration: InputDecoration(
                 labelText: 'Password',
-                errorText:
-                    state.password.invalid ? 'Please enter password!' : null,
+                // errorText:
+                    // state.password.invalid ? 'Please enter password!' : null,
                 labelStyle: TextStyle(
                     fontSize: ratio * 35,
                     color: const Color.fromRGBO(255, 255, 255, 1),
@@ -122,14 +122,15 @@ class SignUpPassword extends StatelessWidget {
                 contentPadding: const EdgeInsets.all(0),
                 suffixIcon: GestureDetector(
                   onTap: () {
-                    context
-                        .read<SignUpBloc>()
-                        .add(SignUpShowPasswordChanged(state.showPassword));
+                    // context
+                    //     .read<SignUpBloc>()
+                    //     .add(SignUpShowPasswordChanged(state.showPassword));
                   },
                   child: Icon(
-                    state.showPassword
-                        ? FontAwesomeIcons.eye
-                        : FontAwesomeIcons.eyeSlash,
+                    // state.showPassword
+                    //     ? FontAwesomeIcons.eye
+                        //: 
+                        FontAwesomeIcons.eyeSlash,
                     size: ratio * 40,
                     color: const Color.fromRGBO(255, 255, 255, 1),
                   ),
@@ -172,8 +173,8 @@ class SignUpPassword extends StatelessWidget {
                 .add(SignUpPasswordChanged(password)))
           );
       }
-    );
-  }
+  //   );
+  // }
 }
 /* End Password */
 
@@ -185,20 +186,20 @@ class SignUpConfirmedPassword extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double ratio = size.width / size.height;
-    return BlocBuilder<SignUpBloc, SignUpState>(
-      buildWhen: (previous, current) =>
-        previous.password != current.password ||
-        previous.showPassword != current.showPassword,
-      builder: (context, state) {
+    // return BlocBuilder<SignUpBloc, SignUpState>(
+    //   buildWhen: (previous, current) =>
+    //     previous.password != current.password ||
+    //     previous.showPassword != current.showPassword,
+    //   builder: (context, state) {
         return Padding(
           padding: const EdgeInsets.only(bottom: 20),
           child: TextField(
             key: const Key('SignUpFormC_confirmedPasswordInput_confirmedPasswordField'),
-            obscureText: state.showPassword,
+            //obscureText: state.showPassword,
             style: const TextStyle(color: Color.fromRGBO(255, 255, 255, 1)),
             decoration: InputDecoration(
               labelText: 'Confirmation password',
-              errorText: state.password.invalid ? 'Please enter confirmation password!' : null,
+              //errorText: state.password.invalid ? 'Please enter confirmation password!' : null,
               labelStyle: TextStyle(
                 fontSize: ratio * 35,
                 color: const Color.fromRGBO(255, 255, 255, 1),
@@ -207,11 +208,12 @@ class SignUpConfirmedPassword extends StatelessWidget {
               contentPadding: const EdgeInsets.all(0),
               suffixIcon: GestureDetector(
                 onTap: () {
-                  context.read<SignUpBloc>()
-                        .add(SignUpShowPasswordChanged(state.showPassword));
+                  // context.read<SignUpBloc>()
+                  //       .add(SignUpShowPasswordChanged(state.showPassword));
                 },
                 child: Icon(
-                  state.showPassword ? FontAwesomeIcons.eye : FontAwesomeIcons.eyeSlash,
+                  //state.showPassword ? FontAwesomeIcons.eye : 
+                  FontAwesomeIcons.eyeSlash,
                   size: ratio * 40,
                   color: const Color.fromRGBO(255, 255, 255, 1),
                 ),
@@ -258,8 +260,8 @@ class SignUpConfirmedPassword extends StatelessWidget {
           )
         );
       }
-    );
-  }
+  //   );
+  // }
 }
 /* End Password */
 
@@ -271,9 +273,9 @@ class SignUpBtnBackC extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double ratio = size.width / size.height;
-    return BlocBuilder<SignUpBloc, SignUpState>(
-      buildWhen: (previous, current) => previous.status != current.status,
-      builder: (context, state) {
+    // return BlocBuilder<SignUpBloc, SignUpState>(
+    //   buildWhen: (previous, current) => previous.status != current.status,
+    //   builder: (context, state) {
         return Padding(
           padding: const EdgeInsets.only(top: 30, bottom: 20),
           child: SizedBox(
@@ -289,7 +291,7 @@ class SignUpBtnBackC extends StatelessWidget {
               onPressed: 
                    () {
                       print("Click me");
-                      Navigator.pop(context);
+                      context.read<SignUpBloc>().add(const SignUpStepChanged(2));
                     },
               child: Text('Back'.toUpperCase(),
                   style: TextStyle(
@@ -300,8 +302,8 @@ class SignUpBtnBackC extends StatelessWidget {
           )
         );
       }
-    );
-  }
+  //   );
+  // }
 }
 /* Btn back */
 
@@ -313,9 +315,9 @@ class SignUpButton extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double ratio = size.width / size.height;
-    return BlocBuilder<SignUpBloc, SignUpState>(
-      buildWhen: (previous, current) => previous.status != current.status,
-      builder: (context, state) {
+    // return BlocBuilder<SignUpBloc, SignUpState>(
+    //   buildWhen: (previous, current) => previous.status != current.status,
+    //   builder: (context, state) {
         return Padding(
           padding: const EdgeInsets.only(top: 30, bottom: 20),
           child: SizedBox(
@@ -328,12 +330,12 @@ class SignUpButton extends StatelessWidget {
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(ratio * 50)))),
               key: const Key('SignUpFormC_continue_raisedButton'),
-              onPressed: state.status == FormzStatus.valid
-                  ? () {
+              onPressed: //state.status == FormzStatus.valid
+                   () {
                       print("Click me");
                       context.read<SignUpBloc>().add(const SignUpSubmitted());
-                    }
-                  : null,
+                    },
+                  //: null,
               child: Text('Sign Up'.toUpperCase(),
                   style: TextStyle(
                       color: Colors.white,
@@ -343,7 +345,7 @@ class SignUpButton extends StatelessWidget {
           )
         );
       }
-    );
-  }
+  //   );
+  // }
 }
 /* Btn Sign Up */

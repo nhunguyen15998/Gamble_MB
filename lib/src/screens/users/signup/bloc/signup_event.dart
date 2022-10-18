@@ -79,6 +79,15 @@ class SignUpShowConfirmedPasswordChanged extends SignUpEvent {
   List<Object> get props => [showPassword];
 }
 
+class SignUpStepChanged extends SignUpEvent {
+  const SignUpStepChanged(this.step);
+
+  final int step;
+  
+  @override
+  List<Object> get props => [step];
+}
+
 class SignUpSubmitted extends SignUpEvent {
   const SignUpSubmitted();
 }
