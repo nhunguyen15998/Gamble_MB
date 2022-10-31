@@ -112,7 +112,7 @@ class _HomeState extends State<Home> {
                   ),
                   //HOT NEWS
                   SizedBox(
-                    height: size.height*0.42,
+                    height: size.height*0.48,
                     width: size.width,
                     child: DecoratedBox(
                       decoration: const BoxDecoration(
@@ -204,7 +204,7 @@ class _HomeState extends State<Home> {
                   ),
                   //CONTACT
                   SizedBox(
-                    height: size.height*0.28,
+                    height: size.height*0.4,
                     width: size.width,
                     child: DecoratedBox(
                       decoration: const BoxDecoration(
@@ -277,112 +277,6 @@ class _HomeState extends State<Home> {
                           )
                         ],
                       )
-                    )
-                  ),
-                  //SUBSCRIBE
-                  SizedBox(
-                    height: size.height*0.28,
-                    width: size.width,
-                    child: DecoratedBox(
-                      decoration: const BoxDecoration(
-                        color: Color.fromRGBO(31, 6, 68, 1),
-                        image: DecorationImage(
-                          image: AssetImage("lib/assets/images/footerbg.jpeg"),
-                          fit: BoxFit.contain,
-                          alignment: Alignment.bottomCenter
-                        ),
-                      ),
-                      child: Container(
-                        margin: const EdgeInsets.only(top: 30, bottom: 120, left: 40, right: 40),
-                        decoration: BoxDecoration(
-                          border: Border.all(width: 3, color: const Color.fromRGBO(0, 162, 255, 1)),
-                          borderRadius: const BorderRadius.all(Radius.circular(20)),
-                          image: const DecorationImage(
-                            image: AssetImage("lib/assets/images/newsletter.jpeg"),
-                            fit: BoxFit.cover
-                          )
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Image.asset("lib/assets/images/vr.png", width: ratio*180),
-                            Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 15),
-                                  child: Text("Subscribe To Jugaro",
-                                    style: TextStyle(
-                                      fontFamily: "Play",
-                                      fontSize: ratio * 16,
-                                      color: const Color.fromRGBO(250, 0, 159, 1),
-                                      fontWeight: FontWeight.w600
-                                    )
-                                  )
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 5),
-                                  child: Text("To Get Exclusive Benefits".toUpperCase(),
-                                    style: TextStyle(
-                                      fontFamily: "Play",
-                                      fontSize: ratio * 27,
-                                      color: const Color.fromRGBO(255, 255, 255, 1),
-                                      fontWeight: FontWeight.w600
-                                    )
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: size.width*0.43,
-                                  height: size.height*0.04,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 15),
-                                    child: TextField(
-                                      key: const Key('SignInForm_passwordInput_textField'),
-                                      style: const TextStyle(
-                                        color: Color.fromRGBO(255, 255, 255, 1),
-                                        fontSize: 10
-                                      ),
-                                      decoration: InputDecoration(
-                                        contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                                        filled: true,
-                                        fillColor: Colors.white.withOpacity(0.2),
-                                        border: const OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(Radius.circular(50)),
-                                          borderSide: BorderSide(color: Color.fromRGBO(231, 140, 53, 1), width: 1)
-                                        ),
-                                        focusedBorder: const OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(Radius.circular(50)),
-                                          borderSide: BorderSide( color: Color.fromRGBO(231, 140, 53, 1), width: 1)
-                                        ),
-                                        suffixIcon: ElevatedButton(
-                                          onPressed: () {
-                                          
-                                          },
-                                          child: Container(
-                                            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 7),
-                                            height: ratio * 70,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(width: 3, color: const Color.fromRGBO(254, 160, 54, 1)),
-                                              borderRadius: BorderRadius.circular(50)
-                                            ),
-                                            child: Text('Subscribe'.toUpperCase(),
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: ratio * 20,
-                                                fontFamily: "Play"
-                                              )
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  )
-                                )
-                              ],
-                            ),
-                            Expanded(child: Image.asset("lib/assets/images/gamecontroller.png", width: ratio*10))
-                          ],
-                        ),
-                      ),
                     )
                   )
                 ],

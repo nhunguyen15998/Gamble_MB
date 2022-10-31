@@ -4,7 +4,7 @@ import 'package:gamble/src/screens/users/authentications/bloc/authentication_blo
 import 'package:gamble/src/screens/users/signin/signin.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gamble/src/services/authentications/authentication_service.dart';
+import 'package:gamble/src/services/authentication_service.dart';
 
 class SignIn extends StatelessWidget {
   const SignIn({Key? key}) : super(key: key);

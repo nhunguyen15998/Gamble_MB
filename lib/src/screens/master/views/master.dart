@@ -4,7 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gamble/src/screens/blogs/blog.dart';
 import 'package:gamble/src/screens/blogs/views/blog.dart';
+import 'package:gamble/src/screens/blogs/views/blog_search.dart';
 import 'package:gamble/src/screens/games/views/game.dart';
 import 'package:gamble/src/screens/home/home.dart';
 import 'package:gamble/src/screens/master/master.dart';
@@ -46,12 +48,31 @@ class _MasterState extends State<Master> {
                 _key.currentState?.openDrawer();
               },
             ),
-            title: Image.asset('lib/assets/images/logo.png', height: size.height * 0.03),
+            title: BlocBuilder<MasterBloc, MasterState>(
+              buildWhen: (previous, current) => previous.pageIndex != current.pageIndex,
+              builder: (context, state) {
+                if(state.pageIndex == 1){
+                  return const SizedBox();
+                } else {
+                  return Image.asset('lib/assets/images/logo.png', height: size.height * 0.03);
+                }
+              },
+            ),
             backgroundColor: const Color.fromRGBO(62, 29, 117, 1),
             actions: <Widget>[
+              BlocBuilder<MasterBloc, MasterState>(
+                buildWhen: (previous, current) => previous.pageIndex != current.pageIndex,
+                builder: (context, state) {
+                  if(state.pageIndex == 1){
+                    return const BlogSearchIconButton();
+                  } else {
+                    return const SizedBox();
+                  }
+                },
+              ),
               IconButton(
                 focusColor: const Color.fromRGBO(250, 0, 159, 1),
-                icon: const Icon(FontAwesomeIcons.bell),
+                icon: const Icon(Icons.notifications),
                 onPressed: () {
                   
                 },
@@ -91,7 +112,8 @@ class _MasterState extends State<Master> {
               buildWhen: (previous, current) => previous.pageIndex != current.pageIndex,
               builder: (context, state) {
                 Widget component = const Home();
-                switch (state.pageIndex) {
+                var index = state.pageIndex;
+                switch (index) {
                   case 0:
                     component = const Home();
                     break;
@@ -112,17 +134,32 @@ class _MasterState extends State<Master> {
           bottomNavigationBar: BlocBuilder<MasterBloc, MasterState>(
             buildWhen: (previous, current) => previous.pageIndex != current.pageIndex,
             builder: (context, state) {
+              Color backgroundColor = const Color.fromRGBO(31, 6, 68, 1);
+              Color color = Colors.white;
+              Color iconColor = const Color.fromRGBO(62, 29, 117, 1);
+              switch (state.pageIndex) {
+                case 0:
+                case 2:
+                case 3:
+                  break;
+                case 1:
+                  backgroundColor = const Color.fromARGB(255, 236, 238, 250);
+                  color = const Color.fromRGBO(31, 6, 68, 1);
+                  iconColor = Colors.white;
+                  break;
+              }
               return CurvedNavigationBar(
                 index: state.pageIndex,
                 onTap: (int index){
                   context.read<MasterBloc>().add(PageIndexChanged(index));
                 },
-                backgroundColor: const Color.fromRGBO(31, 6, 68, 1),
-                items: const [
-                  Icon(Icons.home, size: 30, color: Color.fromRGBO(62, 29, 117, 1)),
-                  Icon(Icons.newspaper, size: 30, color: Color.fromRGBO(62, 29, 117, 1)),
-                  Icon(Icons.gamepad_sharp, size: 30, color: Color.fromRGBO(62, 29, 117, 1)),
-                  Icon(Icons.person, size: 30, color: Color.fromRGBO(62, 29, 117, 1))
+                backgroundColor: backgroundColor,
+                color: color,
+                items: [
+                  Icon(Icons.home, size: 30, color: iconColor),
+                  Icon(Icons.newspaper, size: 30, color: iconColor),
+                  Icon(Icons.gamepad_sharp, size: 30, color: iconColor),
+                  Icon(Icons.person, size: 30, color: iconColor)
                 ],
               );
             },

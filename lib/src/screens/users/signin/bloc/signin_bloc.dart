@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 // ignore: depend_on_referenced_packages
 import 'package:formz/formz.dart';
 import 'package:gamble/src/screens/users/signin/signin.dart';
-import 'package:gamble/src/services/authentications/service.dart';
+import 'package:gamble/src/services/service.dart';
 import 'package:gamble/src/screens/users/authentications/authentication.dart';
 
 part 'signin_event.dart';

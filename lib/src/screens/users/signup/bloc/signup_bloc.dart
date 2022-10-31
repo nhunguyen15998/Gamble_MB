@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 // ignore: depend_on_referenced_packages
 import 'package:formz/formz.dart';
 import 'package:gamble/src/screens/users/signup/signup.dart';
-import 'package:gamble/src/services/authentications/service.dart';
+import 'package:gamble/src/services/service.dart';
 import 'package:gamble/src/screens/users/authentications/authentication.dart';
 
 part 'signup_event.dart';

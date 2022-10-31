@@ -3,13 +3,12 @@ import 'package:bloc/bloc.dart';
 // ignore: depend_on_referenced_packages
 import 'package:equatable/equatable.dart';
 import 'package:gamble/src/screens/users/models/model.dart';
-import 'package:gamble/src/services/authentications/authentication_service.dart';
+import 'package:gamble/src/services/authentication_service.dart';
 
 part 'authentication_state.dart';
 part 'authentication_event.dart';
 
-class AuthenticationBloc
-    extends Bloc<AuthenticationEvent, AuthenticationState> {
+class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
   final AuthenticationService _authenticationService;
 
   AuthenticationBloc(this._authenticationService)
@@ -23,8 +22,7 @@ class AuthenticationBloc
       AppLoaded event, Emitter<AuthenticationState> emit) async {
     emit(AuthenticationLoading());
     try {
-      await Future.delayed(
-          const Duration(milliseconds: 500)); // a simulated delay
+      await Future.delayed(const Duration(milliseconds: 500)); // a simulated delay
       final currentUser = await _authenticationService.getCurrentUser();
 
       if (currentUser != null) {

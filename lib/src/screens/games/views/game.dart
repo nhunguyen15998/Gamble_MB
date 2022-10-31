@@ -35,23 +35,22 @@ class _GamesState extends State<Games> {
           child: Stack(
             children: [
               Container(
-                height: size.height,
+                height: size.height*0.85,
                 width: size.width,
                 color: Colors.transparent,
               ),
               Positioned(
                 child: Image.asset("lib/assets/images/games.png", height: 250, fit: BoxFit.fitHeight),
               ),
-              Positioned(
-                top: ratio*180,
-                right: ratio*280,
+              Center(
+                heightFactor: ratio*6.6,
                 child: Image.asset("lib/assets/images/top-icon.png", height: 80)
               ),
               Positioned(
                 top: ratio*400,
                 child: Container(
                   alignment: Alignment.center,
-                  height: size.height*0.4,
+                  height: size.height*0.53,
                   width: size.width,
                   color: Colors.transparent,
                   child: PageView.builder(
@@ -62,40 +61,66 @@ class _GamesState extends State<Games> {
                       return Container(
                         margin: const EdgeInsets.symmetric(horizontal: 40),
                         decoration: const BoxDecoration(
-                          color: Color.fromRGBO(255, 255, 255, 0.2),
+                          color: Color.fromRGBO(255, 255, 255, 0.08),
                           borderRadius: BorderRadius.all(Radius.circular(15))
                         ),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             ClipRRect(
                               borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
-                              child: Image.asset(images[2], height: 160, fit: BoxFit.cover),
+                              child: Image.asset(images[0], height: size.height*0.25, fit: BoxFit.cover),
                             ),
                             Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: Text("Lorem ipsum",
-                                textAlign: TextAlign.left,
+                              padding: const EdgeInsets.all(20),
+                              child: Text("Fortune Wheel",
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                                 style: TextStyle(
                                   fontFamily: "Play",
-                                  fontSize: ratio * 30,
-                                  fontWeight: FontWeight.w600
+                                  fontSize: ratio * 50,
+                                  color: Colors.white70,
+                                  fontWeight: FontWeight.w500
                                 )
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(left: 10, right: 10),
-                              child: Text("Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
+                              padding: const EdgeInsets.symmetric(horizontal: 30),
+                              child: Text("Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
                                 textAlign: TextAlign.justify,
                                 overflow: TextOverflow.ellipsis,
-                                maxLines: 3,
+                                maxLines: 4,
                                 style: TextStyle(
                                   fontFamily: "Play",
-                                  fontSize: ratio * 22,
+                                  color: Colors.white,
+                                  fontSize: ratio * 30,
                                 )
                               ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 25),
+                              child: Container(
+                                height: ratio * 70,
+                                decoration: BoxDecoration(
+                                  border: Border.all(width: 3, color: const Color.fromRGBO(254, 160, 54, 1)),
+                                  borderRadius: BorderRadius.circular(50)
+                                ),
+                                child: ElevatedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    backgroundColor: Colors.transparent                                    
+                                  ),
+                                  key: const Key('Home_contactBtn'),
+                                  onPressed: () {
+
+                                  },
+                                  child: Text('Play'.toUpperCase(),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: ratio * 30,
+                                      fontFamily: "Play"
+                                    )
+                                  ),
+                                ),
+                              )
                             ),
                           ],
                         ),

@@ -27,7 +27,7 @@ class FakeAuthenticationService extends AuthenticationService {
       'plain_password': password,
     });
     final headers = {HttpHeaders.contentTypeHeader: 'application/json'};
-    final response = await http.post(Uri.http('localhost:9090','/api/user/authenticate'), body: requestBody, headers: headers);
+    final response = await http.post(Uri.http('192.168.0.103:9090','/api/user/authenticate'), body: requestBody, headers: headers);
     Map<String, dynamic> jsonData = json.decode(response.body) as Map<String, dynamic>;
     if (response.statusCode == 200) {
       var code = jsonData.entries.firstWhere((e) => e.key == 'code').value;
