@@ -23,7 +23,12 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     emit(AuthenticationLoading());
     try {
       await Future.delayed(const Duration(milliseconds: 500)); // a simulated delay
-      final currentUser = await _authenticationService.getCurrentUser();
+      var currentUser = await _authenticationService.getCurrentUser();
+
+      if(state is AuthenticationAuthenticated){
+        AuthenticationAuthenticated authenticationAuthenticated = state as AuthenticationAuthenticated;
+        currentUser = authenticationAuthenticated.user;
+      }
 
       if (currentUser != null) {
         emit(AuthenticationAuthenticated(user: currentUser));

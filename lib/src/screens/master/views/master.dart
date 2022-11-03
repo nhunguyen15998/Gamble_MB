@@ -12,6 +12,7 @@ import 'package:gamble/src/screens/home/home.dart';
 import 'package:gamble/src/screens/master/master.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gamble/src/screens/users/profile/profile.dart';
+import 'package:gamble/src/screens/users/profile_notification/views/profile_notification.dart';
 
 class Master extends StatefulWidget {
   const Master({Key? key, required this.index}) : super(key:key);
@@ -74,7 +75,11 @@ class _MasterState extends State<Master> {
                 focusColor: const Color.fromRGBO(250, 0, 159, 1),
                 icon: const Icon(Icons.notifications),
                 onPressed: () {
-                  
+                  Navigator.push(context, 
+                    MaterialPageRoute(builder: ((context) {
+                      return const ProfileNotification();
+                    }))
+                  );
                 },
               ),
             ],
@@ -124,7 +129,7 @@ class _MasterState extends State<Master> {
                     component = const Games();
                     break;
                   case 3:
-                    component = const Profile();
+                    component = const UserProfile();
                     break;
                 }
                 return component;// Text(state.pageIndex.toString());

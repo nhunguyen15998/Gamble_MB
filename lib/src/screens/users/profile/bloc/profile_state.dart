@@ -7,6 +7,16 @@ class ProfileState extends Equatable {
   List<Object?> get props => [];
 }
 
-class ProfileLoading extends ProfileState {}
+class ProfileInitialized extends ProfileState {}
 
-class ProfileLoaded extends ProfileState {}
+class ProfileLoaded extends ProfileState {
+  ProfileLoaded({required this.wallpaper, required this.thumbnail, required this.name, required this.balance});
+
+  String wallpaper;
+  String thumbnail;
+  String name;
+  String balance;
+
+  @override 
+  List<Object> get props => [wallpaper, thumbnail, name, balance];
+}

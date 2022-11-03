@@ -25,6 +25,7 @@ class _ProfileChangePasswordState extends State<ProfileChangePassword> {
             focusColor: const Color.fromRGBO(250, 0, 159, 1),
             icon: const Icon(FontAwesomeIcons.chevronLeft),
             onPressed: () {
+              Navigator.pop(context);
             },
           ),
           centerTitle: true,

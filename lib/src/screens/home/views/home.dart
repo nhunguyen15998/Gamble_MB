@@ -28,7 +28,7 @@ class _HomeState extends State<Home> {
     ];
 
     final PageController blogController = PageController(viewportFraction: 0.45);
-    
+  
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: Scaffold(

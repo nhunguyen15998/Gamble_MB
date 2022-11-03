@@ -27,6 +27,7 @@ List<int> items = [1,2,3];
             focusColor: const Color.fromRGBO(250, 0, 159, 1),
             icon: const Icon(FontAwesomeIcons.chevronLeft),
             onPressed: () {
+              Navigator.pop(context);
             },
           ),
           centerTitle: true,

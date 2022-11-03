@@ -118,7 +118,7 @@ class SignInForm extends StatelessWidget {
 }
 
 class SignInPhone extends StatelessWidget {
-  const SignInPhone({super.key});
+  const SignInPhone({Key? key}):super(key: key);
 
   String? getErrorMsg(Phone phone){
     print(phone.invalid);

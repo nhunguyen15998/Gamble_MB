@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:gamble/src/screens/users/models/model.dart';
 import 'package:http/http.dart' as http;
 
@@ -27,22 +29,27 @@ class FakeAuthenticationService extends AuthenticationService {
       'plain_password': password,
     });
     final headers = {HttpHeaders.contentTypeHeader: 'application/json'};
-    final response = await http.post(Uri.http('192.168.0.103:9090','/api/user/authenticate'), body: requestBody, headers: headers);
+    final response = await http.post(Uri.parse('${dotenv.env['HOST']!}api/user/authenticate'), body: requestBody, headers: headers);
     Map<String, dynamic> jsonData = json.decode(response.body) as Map<String, dynamic>;
     if (response.statusCode == 200) {
       var code = jsonData.entries.firstWhere((e) => e.key == 'code').value;
-      var message = jsonData.entries.firstWhere((e) => e.key == 'msg').value;
+      var message = jsonData.entries.firstWhere((e) => e.key == 'message').value;
       if(code != 200){
         throw Exception(message);
       }
       var user = jsonData.entries.firstWhere((e) => e.key == 'user').value as Map<String, dynamic>;
       var token = jsonData.entries.firstWhere((e) => e.key == 'token').value;
+
+      const storage = FlutterSecureStorage();
+      await storage.write(key: 'token', value: token);
+
       print(user);
       print(token);
       print(message);
+      
       return User.fromJson(user);
     } else {
-      var message = jsonData.entries.firstWhere((e) => e.key == 'msg').value;
+      var message = jsonData.entries.firstWhere((e) => e.key == 'message').value;
       throw Exception(message);
     }
   }
@@ -59,7 +66,7 @@ class FakeAuthenticationService extends AuthenticationService {
       'confirm_password': confirmedPassword
     });
     final headers = {HttpHeaders.contentTypeHeader: 'application/json'};
-    final response = await http.post(Uri.http('localhost:9090','/api/user/register'), body: requestBody, headers: headers);
+    final response = await http.post(Uri.parse('${dotenv.env['HOST']!}api/user/register'), body: requestBody, headers: headers);
     if (response.statusCode == 200) {
       Map<String, dynamic> jsonData = json.decode(response.body) as Map<String, dynamic>;
       var code = jsonData.entries.firstWhere((e) => e.key == 'code').value;
