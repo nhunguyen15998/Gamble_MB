@@ -5,7 +5,12 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gamble/src/screens/users/profile_edit_info/bloc/profile_edit_info_bloc.dart';
+import 'package:gamble/src/screens/users/profile_edit_info/profile_edit_info.dart';
+import 'package:gamble/src/screens/users/signup/models/first_name.dart';
+import 'package:gamble/src/screens/users/signup/models/last_name.dart';
 import 'package:gamble/src/services/profile_service.dart';
+import 'package:formz/formz.dart';
+import 'package:intl/intl.dart';
 
 class ProfileEditInfo extends StatefulWidget {
   const ProfileEditInfo({super.key});
@@ -52,17 +57,27 @@ class _ProfileEditInfoState extends State<ProfileEditInfo>{
             body: SingleChildScrollView(
               child: BlocBuilder<ProfileEditInfoBloc, ProfileEditInfoState>(
                 builder: (context, state) {
+                  if(state is ProfileEditInfoInitialized){
+                    return const Center(child: CircularProgressIndicator());
+                  }
                   if(state is ProfileEditInfoLoaded){
+                    var profileEditInfoLoaded = state;
+                    var firstName = profileEditInfoLoaded.firstNameLoaded;
+                    var lastName = profileEditInfoLoaded.lastNameLoaded;
+                    var phone = profileEditInfoLoaded.phoneLoaded;
+                    var email = profileEditInfoLoaded.emailLoaded;
+                    var birth = profileEditInfoLoaded.birthLoaded;
+                    var gender = profileEditInfoLoaded.genderLoaded;
                     return Padding(
                       padding: EdgeInsets.symmetric(vertical: ratio*90),
                       child: Column(
                         children: [
-                          ProfileEditInfoFirstNameInput(firstName: state.firstName),
-                          ProfileEditInfoLastNameInput(lastName: state.lastName),
-                          ProfileEditInfoPhoneInput(phone: state.phone),
-                          ProfileEditInfoEmailInput(email: state.email),
-                          ProfileEditInfoBirthInput(birth: state.birth),
-                          ProfileEditInfoGenderRadioGroup(gender: state.gender),
+                          ProfileEditInfoFirstNameInput(firstName: firstName, error: state.firstName.invalid ? 'First name is required' : null),
+                          ProfileEditInfoLastNameInput(lastName: lastName, error: state.lastName.invalid ? 'Last name is required' : null),
+                          ProfileEditInfoPhoneInput(phone: phone),
+                          ProfileEditInfoEmailInput(email: email, error: state.email.invalid ? 'Email is required' : null),
+                          ProfileEditInfoBirthInput(birth: birth),
+                          ProfileEditInfoGenderRadioGroup(gender: gender),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 40, left: 20, right: 20),
                             child: SizedBox(
@@ -75,7 +90,11 @@ class _ProfileEditInfoState extends State<ProfileEditInfo>{
                                     shape: MaterialStateProperty.all(RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(ratio * 50)))),
                                 key: const Key('ProfileForm_submitBtn'),
-                                onPressed: () {},
+                                onPressed: state.status == FormzStatus.valid ?
+                                  () {
+                                    context.read<ProfileEditInfoBloc>().add(const ProfileEditInfoSaveBtnClicked());
+                                  }
+                                  : null,
                                 child: Text('Save'.toUpperCase(),
                                   style: TextStyle(
                                     color: Colors.white,
@@ -90,7 +109,7 @@ class _ProfileEditInfoState extends State<ProfileEditInfo>{
                       ),
                     );
                   }
-                  return const CircularProgressIndicator();
+                  return const SizedBox();
                 },
               )
             )
@@ -103,9 +122,11 @@ class _ProfileEditInfoState extends State<ProfileEditInfo>{
 
 //ProfileEditInfoFirstNameInput
 class ProfileEditInfoFirstNameInput extends StatefulWidget {
-  ProfileEditInfoFirstNameInput({Key? key, required this.firstName}):super(key: key);
+  ProfileEditInfoFirstNameInput({Key? key, required this.firstName, this.error}):super(key: key);
 
   String firstName;
+  String? error;
+
   @override
   State<ProfileEditInfoFirstNameInput> createState() => _ProfileEditInfoFirstNameInputState();
 }
@@ -140,6 +161,7 @@ class _ProfileEditInfoFirstNameInputState extends State<ProfileEditInfoFirstName
             fontFamily: "Play"
           ),
           errorStyle: const TextStyle(color: Color.fromRGBO(255, 255, 255, 1)),
+          errorText: widget.error,
           contentPadding: const EdgeInsets.all(0),
           filled: true,
           fillColor: Colors.white.withOpacity(0.2),
@@ -173,7 +195,8 @@ class _ProfileEditInfoFirstNameInputState extends State<ProfileEditInfoFirstName
           borderSide: BorderSide(
           color: Color.fromRGBO(218, 62, 59, 1), width: 1)
           )
-        )
+        ),
+        onChanged: (value) => context.read<ProfileEditInfoBloc>().add(ProfileEditInfoFirstNameChanged(firstName: value)),
       )
     );
   }
@@ -181,9 +204,10 @@ class _ProfileEditInfoFirstNameInputState extends State<ProfileEditInfoFirstName
 
 //ProfileEditInfoLastNameInput
 class ProfileEditInfoLastNameInput extends StatefulWidget {
-  ProfileEditInfoLastNameInput({Key? key, required this.lastName}):super(key: key);
+  ProfileEditInfoLastNameInput({Key? key, required this.lastName, this.error}):super(key: key);
 
   String lastName;
+  String? error;
 
   @override
   State<ProfileEditInfoLastNameInput> createState() => _ProfileEditInfoLastNameInputState();
@@ -218,6 +242,7 @@ class _ProfileEditInfoLastNameInputState extends State<ProfileEditInfoLastNameIn
             fontFamily: "Play"
           ),
           errorStyle: const TextStyle(color: Color.fromRGBO(255, 255, 255, 1)),
+          errorText: widget.error,
           contentPadding: const EdgeInsets.all(0),
           filled: true,
           fillColor: Colors.white.withOpacity(0.2),
@@ -251,7 +276,8 @@ class _ProfileEditInfoLastNameInputState extends State<ProfileEditInfoLastNameIn
           borderSide: BorderSide(
           color: Color.fromRGBO(218, 62, 59, 1), width: 1)
           )
-        )
+        ),
+        onChanged: (value) => context.read<ProfileEditInfoBloc>().add(ProfileEditInfoLastNameChanged(lastName: value)),
       )
     );
   }
@@ -337,9 +363,10 @@ class _ProfileEditInfoPhoneInputState extends State<ProfileEditInfoPhoneInput> {
 
 //ProfileEditInfoEmailInput
 class ProfileEditInfoEmailInput extends StatefulWidget {
-  ProfileEditInfoEmailInput({Key? key, required this.email}):super(key: key);
+  ProfileEditInfoEmailInput({Key? key, required this.email, this.error}):super(key: key);
 
   String email;
+  String? error;
 
   @override
   State<ProfileEditInfoEmailInput> createState() => _ProfileEditInfoEmailInputState();
@@ -374,6 +401,7 @@ class _ProfileEditInfoEmailInputState extends State<ProfileEditInfoEmailInput> {
             fontFamily: "Play"
           ),
           errorStyle: const TextStyle(color: Color.fromRGBO(255, 255, 255, 1)),
+          errorText: widget.error,
           contentPadding: const EdgeInsets.all(0),
           filled: true,
           fillColor: Colors.white.withOpacity(0.2),
@@ -407,7 +435,8 @@ class _ProfileEditInfoEmailInputState extends State<ProfileEditInfoEmailInput> {
           borderSide: BorderSide(
           color: Color.fromRGBO(218, 62, 59, 1), width: 1)
           )
-        )
+        ),
+        onChanged: (value) => context.read<ProfileEditInfoBloc>().add(ProfileEditInfoEmailChanged(email: value)),
       )
     );
   }
@@ -426,11 +455,13 @@ class ProfileEditInfoBirthInput extends StatefulWidget {
 
 class _ProfileEditInfoBirthInputState extends State<ProfileEditInfoBirthInput> with RestorationMixin {
   final birthController = TextEditingController();
+  late ProfileEditInfoBloc profileEditInfoBloc; 
 
   @override
   void initState() {
     super.initState();
     birthController.text = widget.birth;
+    profileEditInfoBloc = context.read<ProfileEditInfoBloc>(); 
   }
 
   @override
@@ -464,6 +495,8 @@ class _ProfileEditInfoBirthInputState extends State<ProfileEditInfoBirthInput> w
       setState(() {
         _selectedDate.value = newSelectedDate;
         birthController.text = '${_selectedDate.value.day}/${_selectedDate.value.month}/${_selectedDate.value.year}';
+        var birth = DateFormat("dd/MM/yyyy").format(DateTime.parse(newSelectedDate.toString()));
+        profileEditInfoBloc.add(ProfileEditInfoBirthChanged(birth: birth));
       });
     }
   }
@@ -491,6 +524,7 @@ class _ProfileEditInfoBirthInputState extends State<ProfileEditInfoBirthInput> w
         key: const Key('ProfileForm_birthInput_birthField'),
         keyboardType: TextInputType.text,
         style: const TextStyle(color: Color.fromRGBO(255, 255, 255, 1)),
+        readOnly: true,
         decoration: InputDecoration(
           labelText: 'Birth',
           labelStyle: TextStyle(
@@ -539,7 +573,7 @@ class _ProfileEditInfoBirthInputState extends State<ProfileEditInfoBirthInput> w
           borderSide: BorderSide(
           color: Color.fromRGBO(218, 62, 59, 1), width: 1)
           )
-        )
+        ),
       )
     );
   }
@@ -616,6 +650,7 @@ class _ProfileEditInfoGenderRadioGroupState extends State<ProfileEditInfoGenderR
                       setState(() {
                         _character = value;
                       });
+                      context.read<ProfileEditInfoBloc>().add(ProfileEditInfoGenderChanged(gender: _character!.index));
                     },
                   ),
                 )
@@ -633,6 +668,7 @@ class _ProfileEditInfoGenderRadioGroupState extends State<ProfileEditInfoGenderR
                       setState(() {
                         _character = value;
                       });
+                      context.read<ProfileEditInfoBloc>().add(ProfileEditInfoGenderChanged(gender: _character!.index));
                     },
                   ),
                 )
@@ -651,6 +687,7 @@ class _ProfileEditInfoGenderRadioGroupState extends State<ProfileEditInfoGenderR
                       setState(() {
                         _character = value;
                       });
+                      context.read<ProfileEditInfoBloc>().add(ProfileEditInfoGenderChanged(gender: _character!.index));
                     },
                   ),
                 )

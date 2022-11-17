@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gamble/src/screens/wheel/views/wheel.dart';
 import 'package:http/http.dart';
 
 class Games extends StatefulWidget {
@@ -55,7 +56,7 @@ class _GamesState extends State<Games> {
                   color: Colors.transparent,
                   child: PageView.builder(
                     padEnds: false,
-                    itemCount: 3,
+                    itemCount: 1,
                     controller: pageController,
                     itemBuilder: (context, pagePosition) {
                       return Container(
@@ -110,7 +111,11 @@ class _GamesState extends State<Games> {
                                   ),
                                   key: const Key('Home_contactBtn'),
                                   onPressed: () {
-
+                                    Navigator.push(context, 
+                                      MaterialPageRoute(builder: (context){
+                                        return const Wheel();
+                                      })
+                                    );
                                   },
                                   child: Text('Play'.toUpperCase(),
                                     style: TextStyle(

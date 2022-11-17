@@ -2,8 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gamble/src/screens/users/wallet_transaction/bloc/wallet_transaction_bloc.dart';
+import 'package:gamble/src/screens/users/wallet_transaction/wallet_transaction.dart';
+import 'package:gamble/src/screens/users/wallet_transaction_detail/views/wallet_transaction_detail.dart';
+import 'package:gamble/src/services/transaction_service.dart';
+import 'package:gamble/src/utils/helpers.dart';
 
 class WalletTransaction extends StatefulWidget {
   const WalletTransaction({super.key});
@@ -30,7 +36,7 @@ class _WalletTransactionState extends State<WalletTransaction> {
             },
           ),
           centerTitle: true,
-          title: Text('Deposit', 
+          title: Text('Transactions', 
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.white,
@@ -41,105 +47,12 @@ class _WalletTransactionState extends State<WalletTransaction> {
           backgroundColor: const Color.fromRGBO(31, 6, 68, 1),
           shadowColor: Colors.transparent,
         ),
-        backgroundColor: const Color.fromRGBO(31, 6, 68, 1),
-        body: 
-        // SingleChildScrollView(
-        //   child: 
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                height: size.height*0.5,
-                width: size.width,
-                child: Column(
-                  children: const [
-                    DepositAmountInput(),
-                    DepositPaymentMethodRadioGroup(),
-                  ],
-                )
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 40, left: 20, right: 20),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: ratio * 100,
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                            Color.fromARGB(255, 250, 137, 0)),
-                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(ratio * 50)))),
-                    key: const Key('ProfileForm_submitBtn'),
-                    onPressed: () {},
-                    child: Text('Proceed payment'.toUpperCase(),
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: ratio * 40,
-                        fontFamily: "Play"
-                      )
-                    ),
-                  )
-                )
-              )
-            ]
-          )
-        //)
-      )
-    );
-  }
-}
-
-//DepositAmountInput
-class DepositAmountInput extends StatefulWidget {
-  const DepositAmountInput({super.key});
-
-  @override
-  State<DepositAmountInput> createState() => _DepositAmountInputState();
-}
-
-class _DepositAmountInputState extends State<DepositAmountInput> {
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    double ratio = size.width / size.height;
-
-    return Padding(
-      padding: const EdgeInsets.only(top: 40 , bottom: 40, left: 20, right: 20),
-      child: TextField(
-        key: const Key('WalletTransaction_amountField'),
-        keyboardType: TextInputType.text,
-        style: const TextStyle(color: Color.fromRGBO(255, 255, 255, 1)),
-        decoration: InputDecoration(
-          hintText: "Enter desired amount",
-          hintStyle: TextStyle(color: Colors.white),
-          labelText: 'Deposit amount',
-          labelStyle: TextStyle(
-            fontSize: ratio * 35,
-            color: const Color.fromRGBO(255, 255, 255, 1),
-            fontFamily: "Play"
-          ),
-          errorStyle: const TextStyle(color: Color.fromRGBO(255, 255, 255, 1)),
-          contentPadding: EdgeInsets.all(ratio*30),
-          filled: true,
-          fillColor: Colors.white.withOpacity(0.2),
-          focusedBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(50)),
-            borderSide: BorderSide(color: Color.fromRGBO(250, 0, 159, 1), width: 1)
-          ),
-          enabledBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(50)),
-            borderSide: BorderSide(
-            color: Color.fromRGBO(210, 213, 252, 1), width: 1)
-          ),
-          errorBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(50)),
-          borderSide: BorderSide(
-          color: Color.fromRGBO(218, 62, 59, 1), width: 1)
-          ),
-          focusedErrorBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(50)),
-          borderSide: BorderSide(
-          color: Color.fromRGBO(218, 62, 59, 1), width: 1)
+        backgroundColor: Colors.white,
+        body: RepositoryProvider(
+          create:(context) => TransactionManagement(),
+          child: BlocProvider(
+            create: (context) => WalletTransactionBloc(RepositoryProvider.of<TransactionManagement>(context))..add(WalletTransactionInitial(page: 1)),
+            child: TransactionList(),
           )
         )
       )
@@ -147,86 +60,161 @@ class _DepositAmountInputState extends State<DepositAmountInput> {
   }
 }
 
-//radios
-class DepositPaymentMethodRadioGroup extends StatefulWidget {
-  const DepositPaymentMethodRadioGroup({Key? key}):super(key: key);
+class TransactionList extends StatefulWidget {
+  const TransactionList({super.key});
 
   @override
-  State<DepositPaymentMethodRadioGroup> createState() => _DepositPaymentMethodRadioGroupState();
+  State<TransactionList> createState() => _TransactionListState();
 }
-enum PaymentMethods { vnpay, momo, bitcoin }
 
-class _DepositPaymentMethodRadioGroupState extends State<DepositPaymentMethodRadioGroup> {
-  PaymentMethods? _paymentMethod = PaymentMethods.vnpay;
+class _TransactionListState extends State<TransactionList> {
+  ScrollController scrollController = ScrollController();
+  late WalletTransactionBloc walletTransactionBloc; 
+  int page = 1;
+
+  scrollListener() {
+    double pos = scrollController.position.pixels;
+    double maxScrollExtent = scrollController.position.maxScrollExtent;
+    if(pos == maxScrollExtent) {
+     page++;
+     walletTransactionBloc.add(WalletTransactionInitial(page: page));
+    } 
+  }
+
+  Future<void> onRefresh() async {
+    page = 1;
+    walletTransactionBloc.add(WalletTransactionInitial(page: page));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    scrollController.addListener(scrollListener);
+    walletTransactionBloc = context.read<WalletTransactionBloc>(); 
+  }
+  
+  @override
+  void dispose() {
+    super.dispose();
+    scrollController.dispose();
+  }
+
+  Widget getImage(TransactionListItem transactionListItem, double width){
+    if(transactionListItem.type == TransactionType.withdrawed.index){
+      return Image.asset(Helpers.toWithdrawMethod(transactionListItem.method), width: width);
+    }
+    return Image.asset(Helpers.toMethod(transactionListItem.method), width: width);
+  }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double ratio = size.width / size.height;
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 30),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 30),
-            child: Text("Payment methods",
-              style: TextStyle(
-                fontFamily: "Play",
-                fontSize: ratio * 35,
-                color: Colors.white,
-              )
-            ),
-          ),
-          ListTile(
-            tileColor: Colors.transparent,
-            textColor: Colors.white,
-            title: const Text('VNPay'),
-            horizontalTitleGap: 0,
-            leading: Radio<PaymentMethods>(
-              fillColor: const MaterialStatePropertyAll(Colors.white),
-              value: PaymentMethods.vnpay,
-              groupValue: _paymentMethod,
-              onChanged: (PaymentMethods? value) {
-                setState(() {
-                  _paymentMethod = value;
-                });
+    return BlocBuilder<WalletTransactionBloc, WalletTransactionState>(
+      builder: (context, state) {
+        if(state is WalletTransactionInitialized){
+          return const Center(child: CircularProgressIndicator());
+        }
+        if(state is WalletTransactionNotFound){
+          return const Center(child: Text('Not found'));
+        }
+        if(state is WalletTransactionLoaded){
+          List<TransactionListItem> transactionList = state.transactionList;
+          return RefreshIndicator(
+            onRefresh: onRefresh,
+            child: ListView.separated(
+              controller: scrollController,
+              itemCount: state.hasReachedMax ? transactionList.length : transactionList.length + 1,
+              padding: const EdgeInsets.symmetric(vertical: 30),
+              separatorBuilder: (context, index) => const Divider(color: Colors.transparent),
+              itemBuilder: (context, index) {
+                if(index >= transactionList.length){
+                  return Container(
+                    padding: EdgeInsets.only(bottom: ratio*20),
+                    alignment: Alignment.center,
+                    child: const Center(
+                      child: CircularProgressIndicator()
+                    ),
+                  );
+                }
+                TransactionListItem transactionListItem = transactionList[index];
+                return ListTile(
+                  title: GestureDetector(
+                    onTap: () {
+                      Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                          var id = transactionListItem.id;
+                          return WalletTransactionDetail(transactionId: id);
+                        }),
+                      );
+                    },
+                    child: Container(
+                      width: size.width,
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(255, 198, 176, 235),
+                        borderRadius: BorderRadius.circular(ratio*10)
+                      ),
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: ratio*20),
+                            child: Center(
+                              child: getImage(transactionListItem, ratio*100)
+                              //child: Image.asset(Helpers.toMethod(transactionListItem.method), width: ratio*100)
+                            )
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(vertical: ratio*45),
+                            width: size.width*0.5,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('#${transactionListItem.code}',
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: ratio*37,
+                                    fontWeight: FontWeight.w600
+                                  ),
+                                ),
+                                Text(transactionListItem.createdAt,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: const TextStyle(
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                                Text('${transactionListItem.name} ${Helpers.toType(transactionListItem.type)} ${transactionListItem.receiverName != null ? 'to ${transactionListItem.receiverName}' : ''} ${Helpers.toStatus(transactionListItem.status)}',
+                                  overflow: TextOverflow.visible,
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    color: Colors.black87,
+                                    fontFamily: 'Play',
+                                    fontSize: ratio*30
+                                  ),
+                                ),
+                              ],
+                            )
+                          ),
+                          Expanded(
+                            child: Center(child: Text('${transactionListItem.type == 0 || transactionListItem.receiver == transactionListItem.userId? 
+                                                        '+' : '-'}\$${transactionListItem.amount}'))
+                          )
+                        ],
+                      )
+                    )
+                  )
+                );
               },
-            ),
-          ),
-          ListTile(
-            textColor: Colors.white,
-            title: const Text('Momo'),
-            horizontalTitleGap: 0,
-            leading: Radio<PaymentMethods>(
-              fillColor: const MaterialStatePropertyAll(Colors.white),
-              value: PaymentMethods.momo,
-              groupValue: _paymentMethod,
-              onChanged: (PaymentMethods? value) {
-                setState(() {
-                  _paymentMethod = value;
-                });
-              },
-            ),
-          ),
-          ListTile(
-            textColor: Colors.white,
-            title: const Text('Bitcoin'),
-            horizontalTitleGap: 0,
-            leading: Radio<PaymentMethods>(
-              fillColor: const MaterialStatePropertyAll(Colors.white),
-              value: PaymentMethods.bitcoin,
-              groupValue: _paymentMethod,
-              onChanged: (PaymentMethods? value) {
-                setState(() {
-                  _paymentMethod = value;
-                });
-              },
-            ),
-          )
-        ],
-      )
+            )
+          );
+        }
+        return const SizedBox();
+      },
     );
   }
 }
+
+

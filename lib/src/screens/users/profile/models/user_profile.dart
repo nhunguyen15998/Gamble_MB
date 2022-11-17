@@ -47,7 +47,7 @@ class Profile extends Equatable {
       status: json['status'],
       wallpaper: json['wallpaper'],
       thumbnail: json['thumbnail'],
-      balance: NumberFormat.currency(customPattern: "#,###.##").format(json['cur_amount'])
+      balance: NumberFormat.currency(customPattern: "#,###.", decimalDigits: 4).format(json['cur_amount'])
     );
   }
 

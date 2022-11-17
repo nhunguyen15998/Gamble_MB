@@ -18,7 +18,6 @@ import 'package:gamble/src/services/authentication_service.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
 void main() async {
   await dotenv.load(fileName: ".env");
   runApp(RepositoryProvider<AuthenticationService>(

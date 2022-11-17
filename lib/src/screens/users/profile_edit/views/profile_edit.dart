@@ -16,7 +16,7 @@ class ProfileEdit extends StatefulWidget {
 }
 
 class _ProfileEditState extends State<ProfileEdit> {
-
+  
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -67,244 +67,259 @@ class ProfileEditBody extends StatefulWidget {
 
 class _ProfileEditBodyState extends State<ProfileEditBody> {
 
+  late ProfileEditBloc profileEditBloc;
+
+  Future<void> onRefresh() async {
+    profileEditBloc.add(ProfileEditInitial());
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    profileEditBloc = context.read<ProfileEditBloc>(); 
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double ratio = size.width / size.height;
-
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          ProfileEditHeaderTitle(headerTitle: 'Profile picture'),
-          Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: Container(
-              margin: EdgeInsets.only(bottom: ratio),
-              child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(ratio*320)),
-                child: BlocBuilder<ProfileEditBloc, ProfileEditState>(
-                  builder: (context, state) {
-                    if(state is ProfileEditLoaded){
-                      return Image.network(dotenv.env['HOST']!+state.thumbnail, height: ratio*250, width: ratio*250, fit: BoxFit.cover);
-                    }
-                    return const CircularProgressIndicator();
-                  },
-                )
-              ),
-            ),
-          ),
-          ProfileEditHeaderTitle(headerTitle: 'Cover photo'),
-          Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: Container(
-              margin: EdgeInsets.only(bottom: ratio),
-              child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(ratio*50)),
-                child: BlocBuilder<ProfileEditBloc, ProfileEditState>(
-                  builder: (context, state) {
-                    if(state is ProfileEditLoaded){
-                      return Image.network(dotenv.env['HOST']!+state.wallpaper, fit: BoxFit.cover);
-                    }
-                    return const CircularProgressIndicator();
-                  },
-                )
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 30, bottom: 20, left: 20, right: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Account information',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: ratio*45,
-                    fontFamily: 'Play',
-                    fontWeight: FontWeight.bold
-                  ),
+    
+    return RefreshIndicator(
+      onRefresh: onRefresh,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            ProfileEditHeaderTitle(headerTitle: 'Profile picture'),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Container(
+                margin: EdgeInsets.only(bottom: ratio),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(ratio*320)),
+                  child: BlocBuilder<ProfileEditBloc, ProfileEditState>(
+                    builder: (context, state) {
+                      if(state is ProfileEditLoaded){
+                        return Image.network(dotenv.env['HOST']!+state.thumbnail, height: ratio*250, width: ratio*250, fit: BoxFit.cover);
+                      }
+                      return const CircularProgressIndicator();
+                    },
+                  )
                 ),
-                TextButton(
-                  onPressed: () => {
-                    Navigator.push(context, 
-                      MaterialPageRoute(builder: ((context) {
-                        return ProfileEditInfo();
-                      }))
-                    )
-                  },
-                  child: const Text('Edit',
+              ),
+            ),
+            ProfileEditHeaderTitle(headerTitle: 'Cover photo'),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Container(
+                margin: EdgeInsets.only(bottom: ratio),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(ratio*50)),
+                  child: BlocBuilder<ProfileEditBloc, ProfileEditState>(
+                    builder: (context, state) {
+                      if(state is ProfileEditLoaded){
+                        return Image.network(dotenv.env['HOST']!+state.wallpaper, fit: BoxFit.cover);
+                      }
+                      return const CircularProgressIndicator();
+                    },
+                  )
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 30, bottom: 20, left: 20, right: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Account information',
                     style: TextStyle(
-                      color: Color.fromRGBO(250, 0, 159, 1),
+                      color: Colors.white,
+                      fontSize: ratio*45,
                       fontFamily: 'Play',
+                      fontWeight: FontWeight.bold
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => {
+                      Navigator.push(context, 
+                        MaterialPageRoute(builder: ((context) {
+                          return ProfileEditInfo();
+                        }))
+                      )
+                    },
+                    child: const Text('Edit',
+                      style: TextStyle(
+                        color: Color.fromRGBO(250, 0, 159, 1),
+                        fontFamily: 'Play',
+                      )
                     )
                   )
-                )
-              ],
+                ],
+              )
+            ),
+            BlocBuilder<ProfileEditBloc, ProfileEditState>(
+              builder: (context, state) {
+                if(state is ProfileEditLoaded){
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                        child: SizedBox(
+                          height: ratio*100,
+                          width: double.infinity,
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: ratio*230,
+                                child: Text('First name',
+                                  style: TextStyle(
+                                    fontFamily: 'Play', 
+                                    fontSize: ratio*35,
+                                    color: Colors.white
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Text(state.firstName,
+                                  style: TextStyle(
+                                    fontFamily: 'Play', 
+                                    fontSize: ratio*35,
+                                    color: Colors.white
+                                  ),
+                                )
+                              )
+                            ],
+                          )
+                        )
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                        child: SizedBox(
+                          height: ratio*100,
+                          width: double.infinity,
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: ratio*230,
+                                child: Text('Last name',
+                                  style: TextStyle(
+                                    fontFamily: 'Play', 
+                                    fontSize: ratio*35,
+                                    color: Colors.white
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Text(state.lastName,
+                                  style: TextStyle(
+                                    fontFamily: 'Play', 
+                                    fontSize: ratio*35,
+                                    color: Colors.white
+                                  ),
+                                )
+                              )
+                            ],
+                          )
+                        )
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                        child: SizedBox(
+                          height: ratio*100,
+                          width: double.infinity,
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: ratio*230,
+                                child: Text('Phone',
+                                  style: TextStyle(
+                                    fontFamily: 'Play', 
+                                    fontSize: ratio*35,
+                                    color: Colors.white
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Text(state.phone,
+                                  style: TextStyle(
+                                    fontFamily: 'Play', 
+                                    fontSize: ratio*35,
+                                    color: Colors.white
+                                  ),
+                                )
+                              )
+                            ],
+                          )
+                        )
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                        child: SizedBox(
+                          height: ratio*100,
+                          width: double.infinity,
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: ratio*230,
+                                child: Text('Email',
+                                  style: TextStyle(
+                                    fontFamily: 'Play', 
+                                    fontSize: ratio*35,
+                                    color: Colors.white
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Text(state.email,
+                                  style: TextStyle(
+                                    fontFamily: 'Play', 
+                                    fontSize: ratio*35,
+                                    color: Colors.white
+                                  ),
+                                )
+                              )
+                            ],
+                          )
+                        )
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                        child: SizedBox(
+                          height: ratio*100,
+                          width: double.infinity,
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: ratio*230,
+                                child: Text('Birth',
+                                  style: TextStyle(
+                                    fontFamily: 'Play', 
+                                    fontSize: ratio*35,
+                                    color: Colors.white
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Text(state.birth,
+                                  style: TextStyle(
+                                    fontFamily: 'Play', 
+                                    fontSize: ratio*35,
+                                    color: Colors.white
+                                  ),
+                                )
+                              )
+                            ],
+                          )
+                        )
+                      )
+                    ],
+                  );
+                }
+                return const CircularProgressIndicator();
+              },
             )
-          ),
-          BlocBuilder<ProfileEditBloc, ProfileEditState>(
-            builder: (context, state) {
-              if(state is ProfileEditLoaded){
-                return Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                      child: SizedBox(
-                        height: ratio*100,
-                        width: double.infinity,
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: ratio*230,
-                              child: Text('First name',
-                                style: TextStyle(
-                                  fontFamily: 'Play', 
-                                  fontSize: ratio*35,
-                                  color: Colors.white
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(state.firstName,
-                                style: TextStyle(
-                                  fontFamily: 'Play', 
-                                  fontSize: ratio*35,
-                                  color: Colors.white
-                                ),
-                              )
-                            )
-                          ],
-                        )
-                      )
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                      child: SizedBox(
-                        height: ratio*100,
-                        width: double.infinity,
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: ratio*230,
-                              child: Text('Last name',
-                                style: TextStyle(
-                                  fontFamily: 'Play', 
-                                  fontSize: ratio*35,
-                                  color: Colors.white
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(state.lastName,
-                                style: TextStyle(
-                                  fontFamily: 'Play', 
-                                  fontSize: ratio*35,
-                                  color: Colors.white
-                                ),
-                              )
-                            )
-                          ],
-                        )
-                      )
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                      child: SizedBox(
-                        height: ratio*100,
-                        width: double.infinity,
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: ratio*230,
-                              child: Text('Phone',
-                                style: TextStyle(
-                                  fontFamily: 'Play', 
-                                  fontSize: ratio*35,
-                                  color: Colors.white
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(state.phone,
-                                style: TextStyle(
-                                  fontFamily: 'Play', 
-                                  fontSize: ratio*35,
-                                  color: Colors.white
-                                ),
-                              )
-                            )
-                          ],
-                        )
-                      )
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                      child: SizedBox(
-                        height: ratio*100,
-                        width: double.infinity,
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: ratio*230,
-                              child: Text('Email',
-                                style: TextStyle(
-                                  fontFamily: 'Play', 
-                                  fontSize: ratio*35,
-                                  color: Colors.white
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(state.email,
-                                style: TextStyle(
-                                  fontFamily: 'Play', 
-                                  fontSize: ratio*35,
-                                  color: Colors.white
-                                ),
-                              )
-                            )
-                          ],
-                        )
-                      )
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                      child: SizedBox(
-                        height: ratio*100,
-                        width: double.infinity,
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: ratio*230,
-                              child: Text('Birth',
-                                style: TextStyle(
-                                  fontFamily: 'Play', 
-                                  fontSize: ratio*35,
-                                  color: Colors.white
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(state.birth,
-                                style: TextStyle(
-                                  fontFamily: 'Play', 
-                                  fontSize: ratio*35,
-                                  color: Colors.white
-                                ),
-                              )
-                            )
-                          ],
-                        )
-                      )
-                    )
-                  ],
-                );
-              }
-              return const CircularProgressIndicator();
-            },
-          )
-        ],
-      ),
+          ],
+        ),
+      )
     );
   }
 }
