@@ -6,5 +6,11 @@
   4. Game status[win]:
   5. Game multiple rounds:
   6. Images:
-     <img width="50" alt="round1" src="https://user-images.githubusercontent.com/84984352/202375462-f7fb8d3e-a307-4106-83ef-2606fc8aa693.png">
+     <br/>
+     <div class="row">
+        <div class="col-3">
+          <img width="150" alt="round1" src="https://user-images.githubusercontent.com/84984352/202375462-f7fb8d3e-a307-4106-83ef-2606fc8aa693.png">
+        </div>
+     </div>
+     
     
