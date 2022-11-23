@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 enum TransactionStatus { pending, successfully, failed }
 enum TransactionType { deposited, withdrawed, transferred }
 enum TransactionMethod { vnpay, momo, bitcoin }
@@ -79,4 +81,18 @@ class Helpers {
     return loadedStatus;
   }
 
+ static void loadingAlert(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, 
+      builder: (BuildContext context) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Center(child: CircularProgressIndicator()),
+          ],
+        );
+      },
+    );
+  }
 }

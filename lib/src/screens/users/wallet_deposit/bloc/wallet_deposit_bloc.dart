@@ -39,11 +39,8 @@ class WalletDepositBloc extends Bloc<WalletDepositEvent, WalletDepositState> {
   }
 
   Future<void> _mapWalletDepositSubmittedToState(WalletDepositSubmitted event, Emitter<WalletDepositState> emit) async {
-    // final amount = state.amount.value;
-    // final method = state.method;    
-    if(state.status.isValidated){
-      emit(state.copyWith(status: FormzStatus.submissionInProgress));
-    }
+    final isBtnDisabled = event.isBtnDisabled;
+    emit(state.copyWith(isBtnDisabled: isBtnDisabled));
   }
 
 }

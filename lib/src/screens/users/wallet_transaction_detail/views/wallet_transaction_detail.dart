@@ -171,6 +171,7 @@ class _TransactionDetailBodyState extends State<TransactionDetailBody> {
                   )
                 )
               ),
+              item.type != TransactionType.transferred.index ? 
               Padding(
                 padding: const EdgeInsets.only(bottom: 15, left: 20, right: 20),
                 child: SizedBox(
@@ -196,7 +197,7 @@ class _TransactionDetailBodyState extends State<TransactionDetailBody> {
                     ],
                   )
                 )
-              ),
+              ) : const SizedBox(),
               item.note != null ? 
               Padding(
                 padding: const EdgeInsets.only(bottom: 15, left: 20, right: 20),

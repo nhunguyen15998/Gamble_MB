@@ -39,3 +39,5 @@ class SignInSubmitted extends SignInEvent {
 }
 
 class CloseDialog extends SignInEvent {}
+
+class SignInAlertBtnOKClicked extends SignInEvent {}

@@ -8,6 +8,7 @@ import 'package:gamble/src/screens/users/wallet_deposit/views/vnpay_deposit.dart
 import 'package:gamble/src/screens/users/wallet_deposit/wallet_deposit.dart';
 import 'package:gamble/src/services/transaction_service.dart';
 import 'package:formz/formz.dart';
+import 'package:gamble/src/utils/helpers.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class WalletDeposit extends StatefulWidget {
@@ -90,15 +91,36 @@ class _DepositSubmitButtonState extends State<DepositSubmitButton> {
   late WalletDepositBloc walletDepositBloc;
   bool isClicked = false;
 
+  Future<void> _showErrorMessage(String err) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(err),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     walletDepositBloc = context.read<WalletDepositBloc>();
   }
   
-  Future<Uri?> _vnpayDepositWebView(String amount, int method) async {
-    var url = await walletDepositBloc.transactionService.depositVNPay(amount, method);
-    return url;
+  Future<VNPay?> _vnpayDepositWebView(String amount, int method) async {
+    walletDepositBloc.add(WalletDepositSubmitted(isBtnDisabled: false));
+    return await walletDepositBloc.transactionService.depositVNPay(amount, method);
   }
 
   @override
@@ -124,15 +146,23 @@ class _DepositSubmitButtonState extends State<DepositSubmitButton> {
                 () async {
                   switch (state.method) {
                     case 0:
-                      // walletDepositBloc.add(WalletDepositSubmitted(amount: state.amount.value, method: state.method));
                       //9704198526191432198
-                      var url = await _vnpayDepositWebView(state.amount.value, state.method);
-                      // ignore: use_build_context_synchronously
-                      Navigator.push(context, 
-                        MaterialPageRoute(builder: ((context) {
-                          return VNPayDeposit(url: url);
-                        }))
-                      );
+                      walletDepositBloc.add(WalletDepositSubmitted(isBtnDisabled: true));
+                      Helpers.loadingAlert(context);
+                      Future.delayed(const Duration(milliseconds: 500), () async {
+                        Navigator.pop(context);
+                        var vnpay = await _vnpayDepositWebView(state.amount.value, state.method);
+                        if(vnpay!.code != 200 && vnpay.amount != null){
+                          _showErrorMessage(vnpay.amount.toString());
+                        } else {
+                        // ignore: use_build_context_synchronously
+                          Navigator.push(context, 
+                            MaterialPageRoute(builder: ((context) {
+                              return VNPayDeposit(url: Uri.parse(vnpay.data.toString()));
+                            }))
+                          );
+                        }
+                      });
                       break;
                     case 1:
                       print('hehe: ${state.method}');
@@ -283,38 +313,38 @@ class _DepositPaymentMethodRadioGroupState extends State<DepositPaymentMethodRad
                   },
                 ),
               ),
-              ListTile(
-                textColor: Colors.white,
-                title: const Text('Momo'),
-                horizontalTitleGap: 0,
-                leading: Radio<PaymentMethods>(
-                  fillColor: const MaterialStatePropertyAll(Colors.white),
-                  value: PaymentMethods.momo,
-                  groupValue: _paymentMethod,
-                  onChanged: (PaymentMethods? value) {
-                    setState(() {
-                      _paymentMethod = value;
-                    });
-                    context.read<WalletDepositBloc>().add(WalletDepositMethodChanged(_paymentMethod!.index));
-                  },
-                ),
-              ),
-              ListTile(
-                textColor: Colors.white,
-                title: const Text('Bitcoin'),
-                horizontalTitleGap: 0,
-                leading: Radio<PaymentMethods>(
-                  fillColor: const MaterialStatePropertyAll(Colors.white),
-                  value: PaymentMethods.bitcoin,
-                  groupValue: _paymentMethod,
-                  onChanged: (PaymentMethods? value) {
-                    setState(() {
-                      _paymentMethod = value;
-                    });
-                    context.read<WalletDepositBloc>().add(WalletDepositMethodChanged(_paymentMethod!.index));
-                  },
-                ),
-              )
+              // ListTile(
+              //   textColor: Colors.white,
+              //   title: const Text('Momo'),
+              //   horizontalTitleGap: 0,
+              //   leading: Radio<PaymentMethods>(
+              //     fillColor: const MaterialStatePropertyAll(Colors.white),
+              //     value: PaymentMethods.momo,
+              //     groupValue: _paymentMethod,
+              //     onChanged: (PaymentMethods? value) {
+              //       setState(() {
+              //         _paymentMethod = value;
+              //       });
+              //       context.read<WalletDepositBloc>().add(WalletDepositMethodChanged(_paymentMethod!.index));
+              //     },
+              //   ),
+              // ),
+              // ListTile(
+              //   textColor: Colors.white,
+              //   title: const Text('Bitcoin'),
+              //   horizontalTitleGap: 0,
+              //   leading: Radio<PaymentMethods>(
+              //     fillColor: const MaterialStatePropertyAll(Colors.white),
+              //     value: PaymentMethods.bitcoin,
+              //     groupValue: _paymentMethod,
+              //     onChanged: (PaymentMethods? value) {
+              //       setState(() {
+              //         _paymentMethod = value;
+              //       });
+              //       context.read<WalletDepositBloc>().add(WalletDepositMethodChanged(_paymentMethod!.index));
+              //     },
+              //   ),
+              // )
             ],
           )
         );

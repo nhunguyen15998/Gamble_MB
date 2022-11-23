@@ -28,13 +28,11 @@ class WalletDepositMethodChanged extends WalletDepositEvent {
 
 class WalletDepositSubmitted extends WalletDepositEvent {
   WalletDepositSubmitted({
-    required this.amount,
-    required this.method,
+    required this.isBtnDisabled
   });
 
-  String amount;
-  int method;
+  bool isBtnDisabled;
 
   @override
-  List<Object> get props => [amount, method];
+  List<Object> get props => [isBtnDisabled];
 }

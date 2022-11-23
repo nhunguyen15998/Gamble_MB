@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gamble/src/screens/blogs/models/blog.dart';
-import 'package:gamble/src/screens/blogs/models/blog_cate.dart';
 import 'package:gamble/src/screens/blogs/models/blog_cate_blogs.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,12 +16,14 @@ abstract class BlogService {
 
 class BlogManagement extends BlogService {
   final headers = {
-    HttpHeaders.contentTypeHeader: 'application/json'};
+    HttpHeaders.contentTypeHeader: 'application/json',
+    "auth": dotenv.env['TOKEN'].toString()
+  };
 
   @override
   Future<List<Blog>> getLatestBlogs() async {
     //final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/article/latest-blogs?limit=$param"));
-    final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/article/latest-blogs"));
+    final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/article/latest-blogs"), headers: headers);
     if (response.statusCode == 200) {
       List<Blog> list = <Blog>[];
       for (var item in jsonDecode(response.body)) {
@@ -38,7 +39,7 @@ class BlogManagement extends BlogService {
   Future<List<BlogCateWithChildren>> getBlogCatesAndRelatedBlogs() async {
     var list = <BlogCateWithChildren>[];
     try {
-      final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/article/cates/blogs"));
+      final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/article/cates/blogs"), headers: headers);
       if (response.statusCode == 200) {
         for (var item in jsonDecode(response.body)){
           var blogs = <Blog>[];
@@ -60,7 +61,7 @@ class BlogManagement extends BlogService {
 
   @override
   Future<List<Blog>> getBlogsByCates(int cateId, int page) async {
-    final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/articles?cateId=$cateId&page=$page"));
+    final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/articles?cateId=$cateId&page=$page"), headers: headers);
     if (response.statusCode == 200) {
       List<Blog> list = <Blog>[];
       for (var item in jsonDecode(response.body)) {
@@ -75,7 +76,7 @@ class BlogManagement extends BlogService {
   @override
   Future<Blog?> getBlogById(int blogId) async{
     try {
-      final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/articles/detail?blogId=$blogId"));
+      final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/articles/detail?blogId=$blogId"), headers: headers);
       if (response.statusCode == 200) {
         return Blog.fromJson(jsonDecode(response.body));
       } else {
@@ -92,7 +93,7 @@ class BlogManagement extends BlogService {
     List<Blog> blogs = <Blog>[];
     try {
       if(search.isEmpty) return blogs;
-      final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/articles/search-results?search=$search&page=$page"));
+      final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/articles/search-results?search=$search&page=$page"), headers: headers);
       if (response.statusCode == 200) {
         for(var item in jsonDecode(response.body)){
           blogs.add(Blog.fromJson(item));

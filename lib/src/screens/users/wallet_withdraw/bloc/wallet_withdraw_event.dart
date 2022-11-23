@@ -6,7 +6,16 @@ class WalletWithdrawEvent extends Equatable {
   @override
   List<Object?> get props => [];
 }
-class WalletWithdrawBankInitial extends WalletWithdrawEvent {}
+class WalletWithdrawBankInitial extends WalletWithdrawEvent {
+  WalletWithdrawBankInitial({
+    this.bankBalance = 0,
+    this.bankExRate = 0
+  });
+  double bankBalance;
+  double bankExRate;
+  @override
+  List<Object?> get props => [bankBalance, bankExRate];
+}
 
 class WalletWithdrawAccountNameChanged extends WalletWithdrawEvent {
   WalletWithdrawAccountNameChanged({required this.accountName});
@@ -38,10 +47,24 @@ class WalletWithdrawNoteChanged extends WalletWithdrawEvent {
   @override
   List<Object?> get props => [note];
 }
-// class WalletWithdrawBankRequestSubmitted extends WalletWithdrawEvent {}
+class WalletWithdrawBankRequestSubmitted extends WalletWithdrawEvent {
+  WalletWithdrawBankRequestSubmitted({this.isBtnDisabled = false});
+  bool isBtnDisabled;
+  @override
+  List<Object?> get props => [isBtnDisabled];
+}
 
 //bc
-class WalletWithdrawBitcoinInitial extends WalletWithdrawEvent {}
+class WalletWithdrawBitcoinInitial extends WalletWithdrawEvent {
+  WalletWithdrawBitcoinInitial({
+    this.bitcoinBalance = 0,
+    this.bitcoinExRate = 0
+  });
+  double bitcoinBalance;
+  double bitcoinExRate;
+  @override
+  List<Object?> get props => [bitcoinBalance, bitcoinExRate];
+}
 
 class WalletWithdrawBitcoinAmountChanged extends WalletWithdrawEvent {
   WalletWithdrawBitcoinAmountChanged({required this.bitcoinAmount});
@@ -56,6 +79,11 @@ class WalletWithdrawAddressButtonClicked extends WalletWithdrawEvent {
   @override
   List<Object?> get props => [address, transactionCode];
 }
-// class WalletWithdrawBitcoinRequestSubmitted extends WalletWithdrawEvent {}
+class WalletWithdrawBitcoinRequestSubmitted extends WalletWithdrawEvent {
+  WalletWithdrawBitcoinRequestSubmitted({this.isBtnDisabled = false});
+  bool isBtnDisabled;
+  @override
+  List<Object?> get props => [isBtnDisabled];
+}
 
 

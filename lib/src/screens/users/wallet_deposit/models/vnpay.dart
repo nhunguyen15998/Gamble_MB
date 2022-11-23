@@ -5,11 +5,13 @@ import 'package:intl/intl.dart';
 class VNPay extends Equatable {
   final int code;
   final String? message;
-  final String data;
+  final String? amount;
+  final String? data;
 
   const VNPay({
     required this.code,
     required this.message,
+    required this.amount,
     required this.data
   });
 
@@ -21,6 +23,7 @@ class VNPay extends Equatable {
     return VNPay(
       code: json['code'],
       message: json['message'],
+      amount: json['amount'],
       data: json['data']
     );
   }

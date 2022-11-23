@@ -6,28 +6,28 @@ class SignInState extends Equatable {
       this.phone = const Phone.pure(),
       this.password = const Password.pure(),
       this.showPassword = true,
-      this.error = ''});
+      this.message = ''});
 
   final FormzStatus status;
   final Phone phone;
   final Password password;
   final bool showPassword;
-  final String error;
+  final String message;
 
   SignInState copyWith(
       {FormzStatus? status,
       Phone? phone,
       Password? password,
       bool? showPassword,
-      String? error}) {
+      String? message}) {
     return SignInState(
         status: status ?? this.status,
         phone: phone ?? this.phone,
         password: password ?? this.password,
         showPassword: showPassword ?? this.showPassword,
-        error: error ?? this.error);
+        message: message ?? this.message);
   }
 
   @override
-  List<Object> get props => [status, phone, password, showPassword, error];
+  List<Object> get props => [status, phone, password, showPassword, message];
 }

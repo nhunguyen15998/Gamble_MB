@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 abstract class ProfileService {
   Future<Profile?> getUserProfile();
   Future<bool> updateUserProfile(ProfileUpdate profileUpdate);
+  Future<Map<String, dynamic>> changePassword(String request);
 }
 
 class ProfileManagement extends ProfileService {
@@ -57,6 +58,24 @@ class ProfileManagement extends ProfileService {
       
     }
     return false;
+  }
+
+  @override
+  Future<Map<String, dynamic>> changePassword(String request) async {
+    Map<String, dynamic> result = <String, dynamic>{};
+    try {
+      final response = await http.post(Uri.parse("${dotenv.env['HOST']!}api/user/change-password"), headers: headers, body: request);
+      Map<String, dynamic> jsonData = json.decode(response.body) as Map<String, dynamic>;
+      if (response.statusCode == 200) {
+        var code = jsonData.entries.firstWhere((e) => e.key == 'code').value;
+        var message = jsonData.entries.firstWhere((e) => e.key == 'message').value;
+        result.addAll(<String, dynamic>{"code":code});
+        result.addAll(<String, dynamic>{"message":message});
+      }
+    } catch (e) {
+      print(e);
+    }
+    return result;
   }
 
 }

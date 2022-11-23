@@ -6,18 +6,19 @@ import 'package:gamble/src/screens/users/wallet_deposit/wallet_deposit.dart';
 import 'package:gamble/src/screens/users/wallet_transaction/wallet_transaction.dart';
 import 'package:gamble/src/screens/users/wallet_transaction_detail/wallet_transaction_detail.dart';
 import 'package:http/http.dart' as http;
-import 'package:url_launcher/url_launcher.dart';
 
 abstract class TransactionService {
+  //on loaded
+  Future<Map<String, dynamic>> getBalanceAndExchangeRate(String currency);
   //deposit
-  Future<Uri?> depositVNPay(String amount, int method);
+  Future<VNPay?> depositVNPay(String amount, int method);
   Future<Map<String, dynamic>> returnVNPayDespositResult(String url);
   //withdraw
-  Future<Map<String, dynamic>> withdrawBank(String withdrawBank);
+  Future<Map<String, dynamic>> withdrawBank(String withdrawBank, String path);
   Future<Map<String, dynamic>> getBCAddress();
-  Future<Map<String, dynamic>> withdrawBitcoin(String withdrawBitcoin);
+  Future<Map<String, dynamic>> withdrawBitcoin(String withdrawBitcoin, String path);
   //transfer  
-  Future<void> transfer();
+  Future<Map<String, dynamic>> transfer(String transfer, String path);
   //transaction
   Future<List<TransactionListItem>> getTransactions(int page);
   Future<TransactionItemDetail?> getTransactionById(int transactionId);
@@ -29,9 +30,27 @@ class TransactionManagement extends TransactionService {
     "auth": dotenv.env['TOKEN'].toString()
   };
 
+  //on loaded
+  Future<Map<String, dynamic>> getBalanceAndExchangeRate(String currency) async {
+     Map<String, dynamic> result = <String, dynamic>{};
+    try {
+      final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/getExRateAndBalance?name=$currency"), headers: headers);
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(response.body) as Map<String, dynamic>;
+        var balance = jsonData.entries.firstWhere((e) => e.key == 'balance').value;
+        var exchangeRate = jsonData.entries.firstWhere((e) => e.key == 'exchangeRate').value;
+        result.addAll(<String, dynamic>{"balance":balance});
+        result.addAll(<String, dynamic>{"exchangeRate":exchangeRate});
+      }
+    } catch (e) {
+      print(e);
+    }
+    return result;
+  }
+
   //deposit
   @override
-  Future<Uri?> depositVNPay(String amount, int method) async {
+  Future<VNPay?> depositVNPay(String amount, int method) async {
     try {
       var requestBody = json.encode({
         'amount': amount,
@@ -40,8 +59,7 @@ class TransactionManagement extends TransactionService {
       final response = await http.post(Uri.parse("${dotenv.env['HOST']!}api/depositProcess"), headers: headers, body: requestBody);
       if (response.statusCode == 200) {
         var vnpay = VNPay.fromJson(jsonDecode(response.body));
-        var url = Uri.parse(vnpay.data);//'https://www.google.com/');
-        return url;
+        return vnpay;
       }
     } catch (e) {
       print(e);
@@ -69,15 +87,17 @@ class TransactionManagement extends TransactionService {
 
   //withdraw
   @override
-  Future<Map<String, dynamic>> withdrawBank(String withdrawBank) async {
+  Future<Map<String, dynamic>> withdrawBank(String withdrawBank, String path) async {
     Map<String, dynamic> result = <String, dynamic>{};
     try {
-      final response = await http.post(Uri.parse("${dotenv.env['HOST']!}api/withdrawBankProccess"), headers: headers, body: withdrawBank);
+      final response = await http.post(Uri.parse("${dotenv.env['HOST']!}api/$path"), headers: headers, body: withdrawBank);
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body) as Map<String, dynamic>;
         var code = jsonData.entries.firstWhere((e) => e.key == 'code').value;
-        var message = jsonData.entries.firstWhere((e) => e.key == 'message').value;
+        var message = jsonData['message'] != null ? jsonData['message'].toString() : null;
+        var amount = jsonData['amount'] != null ? jsonData['amount'].toString() : null;
         result.addAll(<String, dynamic>{"code":code});
+        result.addAll(<String, dynamic>{"amount":amount});
         result.addAll(<String, dynamic>{"message":message});
       }
     } catch (e) {
@@ -104,10 +124,11 @@ class TransactionManagement extends TransactionService {
     return result;
   }
 
-  Future<Map<String, dynamic>> withdrawBitcoin(String withdrawBitcoin) async {
+  @override
+  Future<Map<String, dynamic>> withdrawBitcoin(String withdrawBitcoin, String path) async {
     Map<String, dynamic> result = <String, dynamic>{};
     try {
-      final response = await http.post(Uri.parse("${dotenv.env['HOST']!}api/withdrawBitcoinProccess"), headers: headers, body: withdrawBitcoin);
+      final response = await http.post(Uri.parse("${dotenv.env['HOST']!}api/$path"), headers: headers, body: withdrawBitcoin);
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body) as Map<String, dynamic>;
         var code = jsonData.entries.firstWhere((e) => e.key == 'code').value;
@@ -126,12 +147,26 @@ class TransactionManagement extends TransactionService {
   }
 
   //transfer
-  Future<void> transfer() async {
+  @override
+  Future<Map<String, dynamic>> transfer(String transfer, String path) async {
+    Map<String, dynamic> result = <String, dynamic>{};
     try {
-      
+      final response = await http.post(Uri.parse("${dotenv.env['HOST']!}api/$path"), headers: headers, body: transfer);
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(response.body) as Map<String, dynamic>;
+        var code = jsonData.entries.firstWhere((e) => e.key == 'code').value;
+        var phone = jsonData['phone'] != null ? jsonData['phone'].toString() : null;
+        var message = jsonData['message'] != null ? jsonData['message'].toString() : null;
+        var amount = jsonData['amount'] != null ? jsonData['amount'].toString() : null;
+        result.addAll(<String, dynamic>{"code":code});
+        result.addAll(<String, dynamic>{"phone":phone});
+        result.addAll(<String, dynamic>{"message":message});
+        result.addAll(<String, dynamic>{"amount":amount});
+      }
     } catch (e) {
       print(e);
     }
+    return result;
   }
 
   //transaction

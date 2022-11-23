@@ -53,6 +53,7 @@ class _WheelBodyState extends State<WheelBody> {
   TextEditingController betAmount = TextEditingController();
   late WheelBloc wheelBloc;
   StreamController<int> selected = StreamController<int>();
+  bool isPartialBet = false;
 
   @override
   void initState() {
@@ -72,6 +73,7 @@ class _WheelBodyState extends State<WheelBody> {
     var medium = result['medium'];
     var small = result['small'];
     var large = result['large'];
+    var amount = result['amount'];
     if(code != 200){
       _showErrorMessage(message.toString());
     } else {
@@ -103,7 +105,7 @@ class _WheelBodyState extends State<WheelBody> {
         } 
       }
       // show status + update balance
-      wheelBloc.add(WheelBalanceAndStatusUpdated(resultStatus: message, balance: bal)); 
+      wheelBloc.add(WheelBalanceAndStatusUpdated(resultStatus: message == "Drawn" ? message : message+" \$$amount", balance: bal)); 
       // redraw wheel
       await Future.delayed(const Duration(seconds: 3));
       wheelBloc.add(WheelRefreshed(resultStatus: '', hasResult: false, isNext: 0, round: 'Round 1'));
@@ -265,7 +267,10 @@ class _WheelBodyState extends State<WheelBody> {
                                   errorStyle: const TextStyle(color: Color.fromARGB(255, 195, 66, 66)),
                                   border: InputBorder.none
                                 ),
-                                onChanged: (value) => context.read<WheelBloc>().add(AmountChanged(betAmount: value)),
+                                onChanged: (value) {
+                                  isPartialBet = true;
+                                  context.read<WheelBloc>().add(AmountChanged(betAmount: value));
+                                },
                               )
                             );
                           }
@@ -434,11 +439,10 @@ class _WheelBodyState extends State<WheelBody> {
                                             borderRadius: BorderRadius.circular(ratio * 50)))),
                                     onPressed: !state.isBtnDisabled ?
                                     () async {
+                                      isPartialBet = false;
                                       var balance = state.balance;
                                       betAmount.text = '\$$balance';
-                                      wheelBloc.add(WheelButtonsDisabled(isBtnDisabled: true));
-                                      await _returnWheelResult(balance.replaceAll(",", ""), false);
-                                      betAmount.text = '';
+                                      wheelBloc.add(WheelInsaneBetButtonClicked(betAmount: balance));
                                     } : null,
                                     child: Text('Insane bet'.toUpperCase(),
                                       style: TextStyle(
@@ -472,7 +476,8 @@ class _WheelBodyState extends State<WheelBody> {
                                     onPressed: !state.isBtnDisabled ?
                                     () async {
                                       wheelBloc.add(WheelButtonsDisabled(isBtnDisabled: true));
-                                      await _returnWheelResult(state.betAmount, true);
+                                      await _returnWheelResult(state.betAmount, isPartialBet);
+                                      betAmount.text = '';
                                     } : null,
                                     child: Text('Spin'.toUpperCase(),
                                       style: TextStyle(

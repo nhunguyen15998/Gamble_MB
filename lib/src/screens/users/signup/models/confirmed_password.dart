@@ -10,7 +10,7 @@ class ConfirmedPassword
 
   @override
   ConfirmedPasswordValidationError? validator(String value) {
-    if (value.isEmpty || value.length < 6) {
+    if (value.isEmpty) {
       return ConfirmedPasswordValidationError.empty;
     }
     return null;

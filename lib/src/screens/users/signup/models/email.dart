@@ -9,7 +9,7 @@ class Email extends FormzInput<String, EmailValidationError> {
 
   @override
   EmailValidationError? validator(String value) {
-    if (value.isEmpty || value.length < 6) {
+    if (value.isEmpty) {
       return EmailValidationError.empty;
     }
     return null;

@@ -76,6 +76,7 @@ class WheelManagement extends WheelService {
         var small = jsonData['small'] != null ? jsonData['small'].toString() : null;
         var medium = jsonData['medium'] != null ? jsonData['medium'].toString() : null;
         var large = jsonData['large'] != null ? jsonData['large'].toString() : null;
+        var amount = jsonData['amount'] != null ? NumberFormat.currency(customPattern: "#,###.", decimalDigits: 1).format(jsonData['amount']) : null;
         result.addAll(<String, dynamic>{"code":code});
         result.addAll(<String, dynamic>{"message":message});
         result.addAll(<String, dynamic>{"status":status});
@@ -86,6 +87,7 @@ class WheelManagement extends WheelService {
         result.addAll(<String, dynamic>{"small":small});
         result.addAll(<String, dynamic>{"medium":medium});
         result.addAll(<String, dynamic>{"large":large});
+        result.addAll(<String, dynamic>{"amount":amount});
       }
     } catch (e) {
       print(e);

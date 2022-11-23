@@ -23,15 +23,24 @@ class WalletWithdrawBloc extends Bloc<WalletWithdrawEvent, WalletWithdrawState> 
     on<WalletWithdrawBankChanged>(_mapWalletWithdrawBankChangedToState);
     on<WalletWithdrawBankAmountChanged>(_mapWalletWithdrawBankAmountChangedToState);
     on<WalletWithdrawNoteChanged>(_mapWalletWithdrawNoteChangedToState);
+    on<WalletWithdrawBankRequestSubmitted>(_mapWalletWithdrawBankRequestSubmittedToState);
 
     on<WalletWithdrawBitcoinInitial>(_mapWalletWithdrawBitcoinInitialToState);
     on<WalletWithdrawBitcoinAmountChanged>(_mapWalletWithdrawBitcoinAmountChangedToState);
     on<WalletWithdrawAddressButtonClicked>(_mapWalletWithdrawAddressChangedToState);
+    on<WalletWithdrawBitcoinRequestSubmitted>(_mapWalletWithdrawBitcoinRequestSubmittedToState);
   }
-
+  
   //bank
   Future<void> _mapWalletWithdrawInitialToState(WalletWithdrawBankInitial event, Emitter<WalletWithdrawState> emit) async {
-    emit(WalletWithdrawBankInitialized());
+    try {
+      final result = await transactionService.getBalanceAndExchangeRate("VND");
+      final bankBalance = result['balance'];
+      final exchangeRate = result['exchangeRate'];
+      emit(WalletWithdrawBankInitialized(bankBalance: bankBalance, bankExRate: exchangeRate, tempBankBalance: bankBalance));
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> _mapWalletWithdrawAccountNameChangedToState(WalletWithdrawAccountNameChanged event, Emitter<WalletWithdrawState> emit) async {
@@ -63,7 +72,11 @@ class WalletWithdrawBloc extends Bloc<WalletWithdrawEvent, WalletWithdrawState> 
     WalletWithdrawBankInitialized walletWithdrawBank = state as WalletWithdrawBankInitialized;
     var isValid = Formz.validate([walletWithdrawBank.accountNumber, walletWithdrawBank.accountNumber,
                                   walletWithdrawBank.bank, bankAmount]);
-    emit(walletWithdrawBank.copyWith(status: isValid, bankAmount: bankAmount));
+    final regex = RegExp(r"^[+]?[0-9]*([.][0-9]*)?$");
+    var balanceUpdated = bankAmount.value.isEmpty || !regex.hasMatch(bankAmount.value) ? 
+                          walletWithdrawBank.bankBalance : 
+                          walletWithdrawBank.bankBalance - (double.parse(bankAmount.value)*walletWithdrawBank.bankExRate);
+    emit(walletWithdrawBank.copyWith(status: isValid, bankAmount: bankAmount, tempBankBalance: balanceUpdated));
   }
 
   Future<void> _mapWalletWithdrawNoteChangedToState(WalletWithdrawNoteChanged event, Emitter<WalletWithdrawState> emit) async {
@@ -72,16 +85,33 @@ class WalletWithdrawBloc extends Bloc<WalletWithdrawEvent, WalletWithdrawState> 
     emit(walletWithdrawBank.copyWith(note: note));
   }
 
+  Future<void> _mapWalletWithdrawBankRequestSubmittedToState(WalletWithdrawBankRequestSubmitted event, Emitter<WalletWithdrawState> emit) async {
+    final isBtnDisabled = event.isBtnDisabled;
+    WalletWithdrawBankInitialized walletWithdrawBank = state as WalletWithdrawBankInitialized;
+    emit(walletWithdrawBank.copyWith(isBtnDisabled: isBtnDisabled));
+  }
+
   //bitcoin
   Future<void> _mapWalletWithdrawBitcoinInitialToState(WalletWithdrawBitcoinInitial event, Emitter<WalletWithdrawState> emit) async {
-    emit(WalletWithdrawBitcoinInitialized());
+    try {
+      final result = await transactionService.getBalanceAndExchangeRate("BITCOIN");
+      final bitcoinBalance = result['balance'];
+      final exchangeRate = result['exchangeRate'];
+      emit(WalletWithdrawBitcoinInitialized(bitcoinBalance: bitcoinBalance, bitcoinExRate: exchangeRate, tempBitcoinBalance: bitcoinBalance));
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> _mapWalletWithdrawBitcoinAmountChangedToState(WalletWithdrawBitcoinAmountChanged event, Emitter<WalletWithdrawState> emit) async {
     final amount = BitcoinAmount.dirty(event.bitcoinAmount);
     WalletWithdrawBitcoinInitialized walletWithdrawBitcoin = state as WalletWithdrawBitcoinInitialized;
     var isValid = Formz.validate([amount, walletWithdrawBitcoin.address]);
-    emit(walletWithdrawBitcoin.copyWith(bitcoinAmount: amount, status: isValid));
+    final regex = RegExp(r"^[+]?[0-9]*([.][0-9]*)?$");
+    var balanceUpdated = amount.value.isEmpty || !regex.hasMatch(amount.value) ? 
+                          walletWithdrawBitcoin.bitcoinBalance : 
+                          walletWithdrawBitcoin.bitcoinBalance - (double.parse(amount.value)*walletWithdrawBitcoin.bitcoinExRate);
+    emit(walletWithdrawBitcoin.copyWith(bitcoinAmount: amount, status: isValid, tempBitcoinBalance: balanceUpdated));
   }
 
   Future<void> _mapWalletWithdrawAddressChangedToState(WalletWithdrawAddressButtonClicked event, Emitter<WalletWithdrawState> emit) async {
@@ -90,6 +120,12 @@ class WalletWithdrawBloc extends Bloc<WalletWithdrawEvent, WalletWithdrawState> 
     WalletWithdrawBitcoinInitialized walletWithdrawBitcoin = state as WalletWithdrawBitcoinInitialized;
     var isValid = Formz.validate([bcAddress, walletWithdrawBitcoin.bitcoinAmount]);
     emit(walletWithdrawBitcoin.copyWith(status: isValid, address: bcAddress, transactionCode: transactionCode));
+  }
+
+  Future<void> _mapWalletWithdrawBitcoinRequestSubmittedToState(WalletWithdrawBitcoinRequestSubmitted event, Emitter<WalletWithdrawState> emit) async {
+    final isBtnDisabled = event.isBtnDisabled;
+    WalletWithdrawBitcoinInitialized walletWithdrawBitcoin = state as WalletWithdrawBitcoinInitialized;
+    emit(walletWithdrawBitcoin.copyWith(isBtnDisabled: isBtnDisabled));
   }
 
 }

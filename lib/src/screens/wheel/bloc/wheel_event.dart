@@ -98,3 +98,15 @@ class WheelRefreshed extends WheelEvent {
   @override
   List<Object?> get props => [resultStatus, hasResult, isNext, round];
 }
+
+//insane bet
+class WheelInsaneBetButtonClicked extends WheelEvent {
+  WheelInsaneBetButtonClicked({
+    required this.betAmount
+  });
+
+  String betAmount;
+  
+  @override
+  List<Object?> get props => [betAmount];
+}

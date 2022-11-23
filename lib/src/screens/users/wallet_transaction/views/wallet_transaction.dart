@@ -103,6 +103,9 @@ class _TransactionListState extends State<TransactionList> {
     if(transactionListItem.type == TransactionType.withdrawed.index){
       return Image.asset(Helpers.toWithdrawMethod(transactionListItem.method), width: width);
     }
+    if(transactionListItem.type == TransactionType.transferred.index){
+      return Image.asset("lib/assets/images/dollar.png", width: width);
+    }
     return Image.asset(Helpers.toMethod(transactionListItem.method), width: width);
   }
 

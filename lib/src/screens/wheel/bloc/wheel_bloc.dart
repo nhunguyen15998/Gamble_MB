@@ -22,6 +22,7 @@ class WheelBloc extends Bloc<WheelEvent, WheelState> {
     on<WheelBoardChanged>(_mapWheelBoardChangedToState);
     on<WheelBalanceAndStatusUpdated>(_mapWheelBalanceAndStatusUpdatedToState);
     on<WheelRefreshed>(_mapWheelRefreshedToState);
+    on<WheelInsaneBetButtonClicked>(_mapWheelInsaneBetButtonClickedToState);
   }
 
   Future<void> _mapWheelInitialToState(WheelInitial event, Emitter<WheelState> emit) async {
@@ -76,6 +77,12 @@ class WheelBloc extends Bloc<WheelEvent, WheelState> {
     final round = event.round;
     WheelInitialized wheelInitialized = state as WheelInitialized;
     emit(wheelInitialized.copyWith(resultStatus: resultStatus, hasResult: hasResult, isNext: isNext, round: round));
+  }
+
+  Future<void> _mapWheelInsaneBetButtonClickedToState(WheelInsaneBetButtonClicked event, Emitter<WheelState> emit) async {
+    final betAmount = event.betAmount;
+    WheelInitialized wheelInitialized = state as WheelInitialized;
+    emit(wheelInitialized.copyWith(betAmount: betAmount));
   }
 
 }

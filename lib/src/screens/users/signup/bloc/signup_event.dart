@@ -92,4 +92,6 @@ class SignUpSubmitted extends SignUpEvent {
   const SignUpSubmitted();
 }
 
+class SignUpAlertBtnOKClicked extends SignUpEvent {}
+
 class CloseDialog extends SignUpEvent {}

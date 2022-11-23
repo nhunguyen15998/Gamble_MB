@@ -21,6 +21,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     on<SignInPasswordChanged>(_mapPasswordChangedToState);
     on<SignInShowPasswordChanged>(_mapShowPasswordChangedToState);
     on<SignInSubmitted>(_mapSignInSubmittedToState);
+    on<SignInAlertBtnOKClicked>(_mapSignInAlertBtnOKClickedToState);
   }
 
   void _mapPhoneChangedToState(
@@ -64,14 +65,13 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
       try {
         var result = await _authenticationService.signInAction(
             state.phone.value, state.password.value);
-        print(result);
-        if (result != null) {
-          _authenticationBloc.add(UserLoggedIn(user: result));
-          emit(state.copyWith(status: FormzStatus.submissionSuccess));
+        if (result['code'] == 200) {
+          _authenticationBloc.add(UserLoggedIn(user: result['user']));
+          emit(state.copyWith(status: FormzStatus.submissionSuccess, message: result['message']));
         } else {
           emit(state.copyWith(
               status: FormzStatus.submissionFailure,
-              error: "Whoops! Something went wrong"));
+              message: result['message']));
         }
 
         // if (result['error'] == false) {
@@ -91,6 +91,10 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     CloseDialog event,
     SignInState state,
   ) async* {
-    yield state.copyWith(error: "");
+    yield state.copyWith(message: "");
+  }
+
+  Future<void> _mapSignInAlertBtnOKClickedToState(SignInAlertBtnOKClicked event, Emitter<SignInState> emit) async {
+    emit(state.copyWith(status: FormzStatus.valid));
   }
 }

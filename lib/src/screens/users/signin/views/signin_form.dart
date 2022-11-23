@@ -19,101 +19,140 @@ class SignInForm extends StatelessWidget {
     double ratio = size.width / size.height;
 
     return Padding(
-        padding: EdgeInsets.only(bottom: 18, top: size.height * 0.1),
-        child: Container(
-          height: size.height * 0.6,
-          width: double.infinity,
-          margin: const EdgeInsets.all(10),
-          decoration: BoxDecoration(color: Colors.white.withOpacity(0.0)),
-          child: Padding(
-            padding: const EdgeInsets.all(18),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Text("Sign In".toUpperCase(),
-                    style: const TextStyle(
-                        fontFamily: "Play",
-                        fontSize: 20,
-                        color: Color.fromRGBO(255, 255, 255, 1),
-                        fontWeight: FontWeight.w600)),
-                const SignInPhone(),
-                const SignInPassword(),
-                SizedBox(
-                  child: Row(
+      padding: EdgeInsets.only(bottom: 18, top: size.height * 0.1),
+      child: Container(
+        height: size.height * 0.6,
+        width: double.infinity,
+        margin: const EdgeInsets.all(10),
+        decoration: BoxDecoration(color: Colors.white.withOpacity(0.0)),
+        child: Padding(
+          padding: const EdgeInsets.all(18),
+          child: BlocBuilder<SignInBloc, SignInState>(
+            builder: (context, state) {
+              Widget widget = const SizedBox();
+              if(state.status == FormzStatus.submissionInProgress){
+                widget = const Center(child: CircularProgressIndicator());
+              }
+              if(state.status == FormzStatus.submissionFailure){
+                widget = AlertDialog(
+                  icon: const Icon(Icons.error_outline_rounded),
+                  content: Text(state.message),
+                  actions: <Widget>[
+                    TextButton(
+                      child: const Text('OK'),
+                      onPressed: () {
+                        context.read<SignInBloc>().add(SignInAlertBtnOKClicked());
+                      },
+                    ),
+                  ],
+                );
+              }
+              return Stack(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      Expanded(
+                      Text("Sign In".toUpperCase(),
+                          style: const TextStyle(
+                              fontFamily: "Play",
+                              fontSize: 20,
+                              color: Color.fromRGBO(255, 255, 255, 1),
+                              fontWeight: FontWeight.w600)),
+                      const SignInPhone(),
+                      const SignInPassword(),
+                      SizedBox(
                         child: Row(
                           children: <Widget>[
-                            const Icon(
-                              Icons.check_circle,
-                              color: Color.fromRGBO(255, 255, 255, 1),
+                            Expanded(
+                              child: Row(
+                                children: <Widget>[
+                                  const Icon(
+                                    Icons.check_circle,
+                                    color: Color.fromRGBO(255, 255, 255, 1),
+                                  ),
+                                  const SizedBox(
+                                    width: 3.0,
+                                  ),
+                                  Text("Rememeber",
+                                      style: TextStyle(
+                                          fontFamily: "Play",
+                                          fontSize: ratio * 40,
+                                          color:
+                                              const Color.fromRGBO(255, 255, 255, 1)))
+                                ],
+                              ),
                             ),
-                            const SizedBox(
-                              width: 3.0,
-                            ),
-                            Text("Rememeber",
-                                style: TextStyle(
-                                    fontFamily: "Play",
-                                    fontSize: ratio * 40,
-                                    color:
-                                        const Color.fromRGBO(255, 255, 255, 1)))
+                            Expanded(
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: GestureDetector(
+                                  onTap: () {},
+                                  child: Text("Forgot password?",
+                                      style: TextStyle(
+                                          color:
+                                              const Color.fromRGBO(255, 255, 255, 1),
+                                          fontFamily: "Play",
+                                          fontSize: ratio * 40)),
+                                ),
+                              ),
+                            )
                           ],
                         ),
                       ),
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Text("Forgot password?",
+                      const SignInButton(),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text("Don't have account? ",
+                              style: TextStyle(
+                                  fontFamily: "Play",
+                                  fontSize: ratio * 40,
+                                  color: const Color.fromRGBO(255, 255, 255, 1))),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(context, '/signup');
+                            },
+                            child: Text("Register",
                                 style: TextStyle(
-                                    color:
-                                        const Color.fromRGBO(255, 255, 255, 1),
                                     fontFamily: "Play",
-                                    fontSize: ratio * 40)),
+                                    fontSize: ratio * 40,
+                                    color: const Color.fromRGBO(233, 132, 41, 1))),
+                          )
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20),
+                        child: GestureDetector(
+                          onTap: () {},
+                          child: Icon(
+                            Icons.fingerprint,
+                            size: ratio * 130,
+                            color: const Color.fromRGBO(250, 0, 159, 1),
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
-                ),
-                const SignInButton(),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text("Don't have account? ",
-                        style: TextStyle(
-                            fontFamily: "Play",
-                            fontSize: ratio * 40,
-                            color: const Color.fromRGBO(255, 255, 255, 1))),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/signup');
-                      },
-                      child: Text("Register",
-                          style: TextStyle(
-                              fontFamily: "Play",
-                              fontSize: ratio * 40,
-                              color: const Color.fromRGBO(233, 132, 41, 1))),
+                  state.status == FormzStatus.submissionInProgress || state.status == FormzStatus.submissionFailure ?
+                  Positioned(
+                    bottom: -65,
+                    left: -27,
+                    child: Container(
+                      width: size.width,
+                      height: size.height,
+                      color: Colors.transparent,
+                      //Color.fromARGB(44, 250, 0, 158),
+                      child: widget,
                     )
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: GestureDetector(
-                    onTap: () {},
-                    child: Icon(
-                      Icons.fingerprint,
-                      size: ratio * 130,
-                      color: const Color.fromRGBO(250, 0, 159, 1),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ));
+                  ) : const SizedBox() 
+                ]
+              );
+            },
+          )
+        ),
+      )
+    );
   }
 }
 
