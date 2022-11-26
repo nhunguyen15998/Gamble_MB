@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:gamble/src/screens/users/authentications/authentication.dart';
 import 'package:gamble/src/services/profile_service.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
@@ -20,6 +21,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
                            thumbnail: currentUser.thumbnail, 
                            name: '${currentUser.firstName} ${currentUser.lastName}',
                            balance: currentUser.balance));
+      } else {
+        //emit();
       }
     } catch (e) {
       print(e);

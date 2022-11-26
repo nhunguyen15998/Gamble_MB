@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:gamble/src/screens/users/models/model.dart';
+import 'package:gamble/src/utils/helpers.dart';
 import 'package:http/http.dart' as http;
 
 abstract class AuthenticationService {
@@ -12,13 +13,22 @@ abstract class AuthenticationService {
   Future<Map<String, dynamic>> signInAction(String phone, String password);
   Future<Map<String, dynamic>> signUpAction(String firstName, String lastName, String email,
       String phone, String password, String confirmedPassword);
-  Future<void>? signOut();
+  void signOut();
 }
 
 class FakeAuthenticationService extends AuthenticationService {
+  final headers = {HttpHeaders.contentTypeHeader: 'application/json'};
+
   @override
   Future<User?> getCurrentUser() async {
-    return null; // return null for now
+    var token = await Helpers.getCurrentToken();
+    headers.addAll(<String, String>{"auth" : token.toString()});
+    var result = await http.get(Uri.parse('${dotenv.env['HOST']!}api/get-user'), headers: headers);
+    Map<String, dynamic> jsonData = json.decode(result.body) as Map<String, dynamic>;
+    if(jsonData['phone'] != null){
+      return User.fromJson(jsonData);
+    }
+    return null; 
   }
 
   @override
@@ -28,7 +38,6 @@ class FakeAuthenticationService extends AuthenticationService {
       'phone': phone,
       'plain_password': password,
     });
-    final headers = {HttpHeaders.contentTypeHeader: 'application/json'};
     try {
       final response = await http.post(Uri.parse('${dotenv.env['HOST']!}api/user/authenticate'), body: requestBody, headers: headers);
       Map<String, dynamic> jsonData = json.decode(response.body) as Map<String, dynamic>;
@@ -37,15 +46,14 @@ class FakeAuthenticationService extends AuthenticationService {
         var message = jsonData.entries.firstWhere((e) => e.key == 'message').value;
         var user = jsonData['user'] != null ? jsonData.entries.firstWhere((e) => e.key == 'user').value as Map<String, dynamic> : null;
         var token = jsonData['token'] != null ? jsonData.entries.firstWhere((e) => e.key == 'token').value : null;
-
-        // const storage = FlutterSecureStorage();
-        // await storage.write(key: 'token', value: token);
         result.addAll(<String, dynamic>{"code":code});
         result.addAll(<String, dynamic>{"message":message});
         if(user != null){
           var usr = User.fromJson(user);
           result.addAll(<String, dynamic>{"user":usr});
           result.addAll(<String, dynamic>{"token":token});
+          const storage = FlutterSecureStorage();
+          await storage.write(key: 'token', value: token);
         } 
       } else {
         result.addAll(<String, dynamic>{"code":jsonData['code']});
@@ -68,7 +76,6 @@ class FakeAuthenticationService extends AuthenticationService {
       'plain_password': password,
       'confirm_password': confirmedPassword
     });
-    final headers = {HttpHeaders.contentTypeHeader: 'application/json'};
     try {
       final response = await http.post(Uri.parse('${dotenv.env['HOST']!}api/user/register'), body: requestBody, headers: headers);
       Map<String, dynamic> jsonData = json.decode(response.body) as Map<String, dynamic>;
@@ -88,7 +95,12 @@ class FakeAuthenticationService extends AuthenticationService {
   }
 
   @override
-  Future<void>? signOut() {
-    return null;
+  void signOut() {
+    try {
+      const storage = FlutterSecureStorage();
+      storage.delete(key: 'token');
+    } catch (e) {
+      print(e);
+    }
   }
 }

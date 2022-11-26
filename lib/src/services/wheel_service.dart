@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gamble/src/screens/users/profile/profile.dart';
 import 'package:gamble/src/screens/users/profile_edit_info/models/user_profile_update.dart';
 import 'package:gamble/src/screens/wheel/models/wheel_attributes.dart';
+import 'package:gamble/src/utils/helpers.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
@@ -15,12 +16,14 @@ abstract class WheelService {
 class WheelManagement extends WheelService {
   final headers = { 
     HttpHeaders.contentTypeHeader:'application/json',
-    "auth": '${dotenv.env['TOKEN']}'
+    //'${dotenv.env['TOKEN']}'
   };
 
   @override
   Future<List<dynamic>> getBalanceAndWheelAttributes() async {
     List<dynamic> lists = List<dynamic>.empty(growable: true);
+    var token = await Helpers.getCurrentToken();
+    headers.addAll(<String, String>{"auth" : token.toString()});
     try {
       final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/getSliceArrays"), headers: headers);
       if(response.statusCode == 200){
@@ -58,6 +61,8 @@ class WheelManagement extends WheelService {
   @override//9704198526191432198
   Future<Map<String, dynamic>> returnWheelResult(String betAmount, bool isPartialBet) async {
     Map<String, dynamic> result = <String, dynamic>{};
+    var token = await Helpers.getCurrentToken();
+    headers.addAll(<String, String>{"auth" : token.toString()});
     try {
       var requestBody = jsonEncode({
         "betAmount": betAmount,

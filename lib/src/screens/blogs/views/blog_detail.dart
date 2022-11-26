@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gamble/src/screens/blogs/bloc/blog_bloc.dart';
@@ -158,7 +159,7 @@ class _BlogDetailBodyState extends State<BlogDetailBody> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(top: ratio*30),
+                      padding: EdgeInsets.only(top: ratio*30, left: ratio*20, right: ratio*20),
                       child: Text(blog.title.toString(),
                         style: TextStyle(
                           color: Colors.black,
@@ -170,14 +171,9 @@ class _BlogDetailBodyState extends State<BlogDetailBody> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: ratio*30),
-                      child: Text(blog.content.toString(),
-                      textAlign: TextAlign.justify,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: ratio*40,
-                          fontFamily: 'Play',
-                        ),
-                      ),
+                      child: Html(
+                        data: blog.content.toString(),
+                      )
                     ),
                   ],
                 )

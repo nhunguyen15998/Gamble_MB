@@ -22,7 +22,6 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       AppLoaded event, Emitter<AuthenticationState> emit) async {
     emit(AuthenticationLoading());
     try {
-      await Future.delayed(const Duration(milliseconds: 500)); // a simulated delay
       var currentUser = await _authenticationService.getCurrentUser();
 
       if(state is AuthenticationAuthenticated){
@@ -47,7 +46,8 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
 
   Future<void> _mapUserLoggedOutToState(
       UserLoggedOut event, Emitter<AuthenticationState> emit) async {
-    await _authenticationService.signOut();
+    emit(AuthenticationLoading());
+    _authenticationService.signOut();
     emit(AuthenticationNotAuthenticated());
   }
 }

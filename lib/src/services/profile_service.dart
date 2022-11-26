@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gamble/src/screens/users/profile/profile.dart';
 import 'package:gamble/src/screens/users/profile_edit_info/models/user_profile_update.dart';
+import 'package:gamble/src/utils/helpers.dart';
 import 'package:http/http.dart' as http;
 
 abstract class ProfileService {
@@ -14,27 +15,29 @@ abstract class ProfileService {
 class ProfileManagement extends ProfileService {
   final headers = { 
     HttpHeaders.contentTypeHeader:'application/json',
-    "auth": '${dotenv.env['TOKEN']}'
+    //'${dotenv.env['TOKEN']}'
   };
 
   @override
   Future<Profile?> getUserProfile() async {
+    var token = await Helpers.getCurrentToken();
+    headers.addAll(<String, String>{"auth" : token.toString()});
     try {
       final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/get-user"), headers: headers);
       if (response.statusCode == 200) {
         print(jsonDecode(response.body));
         return Profile.fromJson(jsonDecode(response.body));
-      } else {
-        throw Exception('Failed');
       }
     } catch (e) {
       print(e);
-      return null;
     }
+    return null;
   }
 
   @override
   Future<bool> updateUserProfile(ProfileUpdate profileUpdate) async {
+    var token = await Helpers.getCurrentToken();
+    headers.addAll(<String, String>{"auth" : token.toString()});
     try {
       var requestBody = jsonEncode({
         "first_name": profileUpdate.firstName,
@@ -63,6 +66,8 @@ class ProfileManagement extends ProfileService {
   @override
   Future<Map<String, dynamic>> changePassword(String request) async {
     Map<String, dynamic> result = <String, dynamic>{};
+    var token = await Helpers.getCurrentToken();
+    headers.addAll(<String, String>{"auth" : token.toString()});
     try {
       final response = await http.post(Uri.parse("${dotenv.env['HOST']!}api/user/change-password"), headers: headers, body: request);
       Map<String, dynamic> jsonData = json.decode(response.body) as Map<String, dynamic>;

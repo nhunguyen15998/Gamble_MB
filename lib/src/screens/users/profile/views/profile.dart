@@ -8,7 +8,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gamble/src/screens/users/profile/bloc/profile_bloc.dart';
 import 'package:gamble/src/screens/users/profile_change_password/views/profile_change_password.dart';
 import 'package:gamble/src/screens/users/profile_edit/views/profile_edit.dart';
-import 'package:gamble/src/screens/users/profile_notification/views/profile_notification.dart';
 import 'package:gamble/src/screens/users/profile_security/views/profile_security.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gamble/src/screens/users/wallet_deposit/views/wallet_deposit.dart';
@@ -16,6 +15,7 @@ import 'package:gamble/src/screens/users/wallet_transaction/views/wallet_transac
 import 'package:gamble/src/screens/users/wallet_transfer/views/wallet_transfer.dart';
 import 'package:gamble/src/screens/users/wallet_withdraw/views/wallet_withdraw.dart';
 import 'package:gamble/src/services/profile_service.dart';
+import 'package:image_picker/image_picker.dart';
 
 // import 'package:image_picker/image_picker.dart';
 
@@ -35,33 +35,33 @@ class _UserProfileState extends State<UserProfile> with TickerProviderStateMixin
     Icons.brightness_5_sharp
   ];
 
-  // ImagePicker picker = ImagePicker();
-  // XFile? image;
-  // File? imageFile;
-  // /// Get from gallery
-  // getFromGallery() async {
-  //   XFile? pickedFile = await ImagePicker().pickImage(
-  //     source: ImageSource.gallery,
-  //     maxWidth: 1800,
-  //     maxHeight: 1800,
-  //   );
-  //   if (pickedFile != null) {
-  //     imageFile = File(pickedFile.path);
-  //   }
-  // }
-  // /// Get from Camera
-  // getFromCamera() async {
-  //   XFile? pickedFile = await ImagePicker().pickImage(
-  //     source: ImageSource.camera,
-  //     maxWidth: 1800,
-  //     maxHeight: 1800,
-  //   );
-  //   if (pickedFile != null) {
-  //     setState(() {
-  //       imageFile = File(pickedFile.path);
-  //     });
-  //   }
-  // }
+  ImagePicker picker = ImagePicker();
+  XFile? image;
+  File? imageFile;
+  /// Get from gallery
+  getFromGallery() async {
+    XFile? pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 1800,
+      maxHeight: 1800,
+    );
+    if (pickedFile != null) {
+      imageFile = File(pickedFile.path);
+    }
+  }
+  /// Get from Camera
+  getFromCamera() async {
+    XFile? pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.camera,
+      maxWidth: 1800,
+      maxHeight: 1800,
+    );
+    if (pickedFile != null) {
+      setState(() {
+        imageFile = File(pickedFile.path);
+      });
+    }
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -159,10 +159,10 @@ class _UserProfileState extends State<UserProfile> with TickerProviderStateMixin
                                                 child: TextButton(
                                                   onPressed: () async {
                                                     Navigator.pop(context);
-                                                    //image = await picker.pickImage(source: ImageSource.gallery); 
-                                                    // setState(() {
-                                                    //   //update UI
-                                                    // });
+                                                    image = await picker.pickImage(source: ImageSource.gallery); 
+                                                    setState(() {
+                                                      print("abc");
+                                                    });
                                                   }, 
                                                   child: Row(
                                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -253,7 +253,7 @@ class _UserProfileState extends State<UserProfile> with TickerProviderStateMixin
                     child: TabBar(
                       controller: tabController,
                       indicatorColor: const Color.fromRGBO(250, 0, 159, 1),
-                      onTap: (selectedTab){
+                      onTap: (selectedTab) {
                         print("selectedTab: $selectedTab");
                       },
                       tabs: <Widget>[

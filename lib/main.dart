@@ -47,14 +47,16 @@ class Gamble extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.blue, scaffoldBackgroundColor: Colors.white),
       home: 
       BlocBuilder<AuthenticationBloc, AuthenticationState>(
-          builder: (context, state) {
-        if (state is AuthenticationAuthenticated) {
-          return 
-          //const BlogSearch(),
-          const Master(index: 0);
+        builder: (context, state) {
+          if(state is AuthenticationLoading){
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (state is AuthenticationAuthenticated) {
+            return const Master(index: 0);
+          }
+          return const SignIn();
         }
-      return const SignIn();
-      }),
+      ),
       initialRoute: '/',
       routes: {
         '/signin': (context) => const SignIn(),

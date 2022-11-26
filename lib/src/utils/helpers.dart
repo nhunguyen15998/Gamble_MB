@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 enum TransactionStatus { pending, successfully, failed }
 enum TransactionType { deposited, withdrawed, transferred }
@@ -94,5 +95,10 @@ class Helpers {
         );
       },
     );
+  }
+
+  static Future<String?> getCurrentToken() async {
+    const storage = FlutterSecureStorage();
+    return await storage.read(key: "token");
   }
 }

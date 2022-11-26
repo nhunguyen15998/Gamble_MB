@@ -5,6 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gamble/src/screens/users/wallet_deposit/wallet_deposit.dart';
 import 'package:gamble/src/screens/users/wallet_transaction/wallet_transaction.dart';
 import 'package:gamble/src/screens/users/wallet_transaction_detail/wallet_transaction_detail.dart';
+import 'package:gamble/src/utils/helpers.dart';
 import 'package:http/http.dart' as http;
 
 abstract class TransactionService {
@@ -27,12 +28,15 @@ abstract class TransactionService {
 class TransactionManagement extends TransactionService {
   final headers = {
     HttpHeaders.contentTypeHeader: 'application/json',
-    "auth": dotenv.env['TOKEN'].toString()
+    //dotenv.env['TOKEN'].toString()
   };
 
   //on loaded
+  @override
   Future<Map<String, dynamic>> getBalanceAndExchangeRate(String currency) async {
-     Map<String, dynamic> result = <String, dynamic>{};
+    Map<String, dynamic> result = <String, dynamic>{};
+    var token = await Helpers.getCurrentToken();
+    headers.addAll(<String, String>{"auth" : token.toString()});
     try {
       final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/getExRateAndBalance?name=$currency"), headers: headers);
       if (response.statusCode == 200) {
@@ -51,6 +55,8 @@ class TransactionManagement extends TransactionService {
   //deposit
   @override
   Future<VNPay?> depositVNPay(String amount, int method) async {
+    var token = await Helpers.getCurrentToken();
+    headers.addAll(<String, String>{"auth" : token.toString()});
     try {
       var requestBody = json.encode({
         'amount': amount,
@@ -89,6 +95,8 @@ class TransactionManagement extends TransactionService {
   @override
   Future<Map<String, dynamic>> withdrawBank(String withdrawBank, String path) async {
     Map<String, dynamic> result = <String, dynamic>{};
+    var token = await Helpers.getCurrentToken();
+    headers.addAll(<String, String>{"auth" : token.toString()});
     try {
       final response = await http.post(Uri.parse("${dotenv.env['HOST']!}api/$path"), headers: headers, body: withdrawBank);
       if (response.statusCode == 200) {
@@ -109,6 +117,8 @@ class TransactionManagement extends TransactionService {
   @override
   Future<Map<String, dynamic>> getBCAddress() async {
     Map<String, dynamic> result = <String, dynamic>{};
+    var token = await Helpers.getCurrentToken();
+    headers.addAll(<String, String>{"auth" : token.toString()});
     try {
       final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/generateBCAddress"), headers: headers);
       if (response.statusCode == 200) {
@@ -127,6 +137,8 @@ class TransactionManagement extends TransactionService {
   @override
   Future<Map<String, dynamic>> withdrawBitcoin(String withdrawBitcoin, String path) async {
     Map<String, dynamic> result = <String, dynamic>{};
+    var token = await Helpers.getCurrentToken();
+    headers.addAll(<String, String>{"auth" : token.toString()});
     try {
       final response = await http.post(Uri.parse("${dotenv.env['HOST']!}api/$path"), headers: headers, body: withdrawBitcoin);
       if (response.statusCode == 200) {
@@ -150,6 +162,8 @@ class TransactionManagement extends TransactionService {
   @override
   Future<Map<String, dynamic>> transfer(String transfer, String path) async {
     Map<String, dynamic> result = <String, dynamic>{};
+    var token = await Helpers.getCurrentToken();
+    headers.addAll(<String, String>{"auth" : token.toString()});
     try {
       final response = await http.post(Uri.parse("${dotenv.env['HOST']!}api/$path"), headers: headers, body: transfer);
       if (response.statusCode == 200) {
@@ -172,6 +186,8 @@ class TransactionManagement extends TransactionService {
   //transaction
   @override
   Future<List<TransactionListItem>> getTransactions(int page) async {
+    var token = await Helpers.getCurrentToken();
+    headers.addAll(<String, String>{"auth" : token.toString()});
     try {
       final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/user/transactions?page=$page"), headers: headers);
       if (response.statusCode == 200) {
@@ -191,6 +207,8 @@ class TransactionManagement extends TransactionService {
 
   @override
   Future<TransactionItemDetail?> getTransactionById(int transactionId) async{
+    var token = await Helpers.getCurrentToken();
+    headers.addAll(<String, String>{"auth" : token.toString()});
     try {
       final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/user/transaction?transactionId=$transactionId"), headers: headers);
       if (response. statusCode == 200) {
