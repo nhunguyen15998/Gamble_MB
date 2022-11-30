@@ -14,7 +14,6 @@
           <img width="150" class="mr-5" alt="round3" src="https://user-images.githubusercontent.com/84984352/202391052-04eaf32e-f7e5-46d5-a48e-8c640c4738fc.png">
      </section>
      
-  7. Videos:
-    - blog: https://user-images.githubusercontent.com/84984352/204723242-e5b1fa7e-be57-4105-b238-c42236ae42c3.mp4
-    - security: https://user-images.githubusercontent.com/84984352/204723517-ae7df485-420f-4536-837e-20c9e2c720f0.mp4
+  7. Videos: open the link below and choose ZIP Extractor to view
+     https://drive.google.com/file/d/1zE4UiylUkSibT2k0wrvmSgjchkJCcC0l/view?usp=sharing
 
