@@ -11,7 +11,7 @@ class ProfileEditInitialized extends ProfileEditState {}
 
 class ProfileEditLoaded extends ProfileEditState {
   ProfileEditLoaded({
-    required this.wallpaper,
+    this.wallpaper = "",
     required this.thumbnail,
     required this.firstName,
     required this.lastName,

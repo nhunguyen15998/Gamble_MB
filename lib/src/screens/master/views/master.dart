@@ -35,14 +35,15 @@ class _MasterState extends State<Master> {
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
-      child: BlocProvider<AuthenticationBloc>(
-        create: (context) {
-          final authenticationService = FakeAuthenticationService();
-          var authenticationBloc = AuthenticationBloc(authenticationService);
-          return authenticationBloc;
-        },
+      // child: BlocProvider<AuthenticationBloc>(
+      //   create: (context) {
+      //     final authenticationService = FakeAuthenticationService();
+      //     var authenticationBloc = AuthenticationBloc(authenticationService);
+      //     return authenticationBloc;
+      //   },
         child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
           builder: (context, state) {
+            print(state);
             if(state is AuthenticationNotAuthenticated){
               return const SignIn();
             }
@@ -109,44 +110,44 @@ class _MasterState extends State<Master> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Image.asset('lib/assets/images/bitcoin.png', width: ratio*150),
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(vertical: ratio*10),
-                                    child: Text('Name',
-                                      style: TextStyle(
-                                        fontFamily: 'Play',
-                                        fontSize: ratio*30,
-                                        color: Colors.white
-                                      ),
-                                    )
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(vertical: ratio*10),
-                                    child: Text('Name',
-                                      style: TextStyle(
-                                        fontFamily: 'Play',
-                                        fontSize: ratio*30,
-                                        color: Colors.white
-                                      ),
-                                    )
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(vertical: ratio*10),
-                                    child: Text('Name',
-                                      style: TextStyle(
-                                        fontFamily: 'Play',
-                                        fontSize: ratio*30,
-                                        color: Colors.white
-                                      ),
-                                    )
-                                  ),
-                                ],
-                              )
-                            )
+                            // Image.asset('lib/assets/images/bitcoin.png', width: ratio*150),
+                            // Expanded(
+                            //   child: Column(
+                            //     mainAxisAlignment: MainAxisAlignment.center,
+                            //     children: [
+                            //       Padding(
+                            //         padding: EdgeInsets.symmetric(vertical: ratio*10),
+                            //         child: Text('Name',
+                            //           style: TextStyle(
+                            //             fontFamily: 'Play',
+                            //             fontSize: ratio*30,
+                            //             color: Colors.white
+                            //           ),
+                            //         )
+                            //       ),
+                            //       Padding(
+                            //         padding: EdgeInsets.symmetric(vertical: ratio*10),
+                            //         child: Text('Name',
+                            //           style: TextStyle(
+                            //             fontFamily: 'Play',
+                            //             fontSize: ratio*30,
+                            //             color: Colors.white
+                            //           ),
+                            //         )
+                            //       ),
+                            //       Padding(
+                            //         padding: EdgeInsets.symmetric(vertical: ratio*10),
+                            //         child: Text('Name',
+                            //           style: TextStyle(
+                            //             fontFamily: 'Play',
+                            //             fontSize: ratio*30,
+                            //             color: Colors.white
+                            //           ),
+                            //         )
+                            //       ),
+                            //     ],
+                            //   )
+                            // )
                           ],
                         )
                       ),
@@ -233,7 +234,7 @@ class _MasterState extends State<Master> {
             );
           }
         )
-      )
+      //)
     );
   }
 }

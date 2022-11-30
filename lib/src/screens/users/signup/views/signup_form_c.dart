@@ -52,57 +52,57 @@ class SignUpFormC extends StatelessWidget {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                  Text(
-                    "Register".toUpperCase(),
-                    style: const TextStyle(
-                      fontFamily: "Play",
-                      fontSize: 20,
-                      color: Color.fromRGBO(255, 255, 255, 1),
-                      fontWeight: FontWeight.w600
-                    )
-                  ),
-                  SignUpPasswordInput(value: state.password.valid ? state.password.value : null),
-                  SignUpConfirmedPasswordInput(value: state.confirmedPassword.valid ? state.confirmedPassword.value : null),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: const <Widget>[
-                      SignUpBtnBackC(),
-                      SignUpButton()
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text("Already a member? ",
-                          style: TextStyle(
-                              fontFamily: "Play",
-                              fontSize: ratio * 40,
-                              color: const Color.fromRGBO(255, 255, 255, 1))),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(context, '/signin');
-                        },
-                        child: Text("Sign In",
-                            style: TextStyle(
-                                fontFamily: "Play",
-                                fontSize: ratio * 40,
-                                color: const Color.fromRGBO(233, 132, 41, 1))),
-                      )
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 50),
-                    child: GestureDetector(
-                      onTap: () {},
-                      child: Icon(
-                        Icons.fingerprint,
-                        size: ratio * 130,
-                        color: const Color.fromRGBO(250, 0, 159, 1),
+                      Text(
+                        "Register".toUpperCase(),
+                        style: const TextStyle(
+                          fontFamily: "Play",
+                          fontSize: 20,
+                          color: Color.fromRGBO(255, 255, 255, 1),
+                          fontWeight: FontWeight.w600
+                        )
                       ),
-                    ),
-                  ),
-                ],
+                      SignUpPasswordInput(value: state.password.valid ? state.password.value : null),
+                      SignUpConfirmedPasswordInput(value: state.confirmedPassword.valid ? state.confirmedPassword.value : null),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: const <Widget>[
+                          SignUpBtnBackC(),
+                          SignUpButton()
+                        ],
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text("Already a member? ",
+                              style: TextStyle(
+                                  fontFamily: "Play",
+                                  fontSize: ratio * 30,
+                                  color: const Color.fromRGBO(255, 255, 255, 1))),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(context, '/signin');
+                            },
+                            child: Text("Sign In",
+                                style: TextStyle(
+                                    fontFamily: "Play",
+                                    fontSize: ratio * 30,
+                                    color: const Color.fromRGBO(233, 132, 41, 1))),
+                          )
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 50),
+                        child: GestureDetector(
+                          onTap: () {},
+                          child: Icon(
+                            Icons.fingerprint,
+                            size: ratio * 130,
+                            color: const Color.fromRGBO(250, 0, 159, 1),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   state.status == FormzStatus.submissionInProgress || state.status == FormzStatus.submissionFailure ?
                   Positioned(

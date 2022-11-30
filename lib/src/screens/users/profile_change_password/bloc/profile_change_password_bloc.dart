@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:gamble/src/screens/users/profile_change_password/models/change_password.dart';
+import 'package:gamble/src/services/authentication_service.dart';
 import 'package:gamble/src/services/profile_service.dart';
 import 'package:meta/meta.dart';
 import 'package:formz/formz.dart';
@@ -23,7 +24,11 @@ class ProfileChangePasswordBloc extends Bloc<ProfileChangePasswordEvent, Profile
   Future<void> _mapProfileChangePasswordEventToState(ProfileChangePasswordEvent event, Emitter<ProfileChangePasswordState> emit) async {}
 
   Future<void> _mapProfileAlertBtnOKClickedToState(ProfileAlertBtnOKClicked event, Emitter<ProfileChangePasswordState> emit) async {
-    emit(state.copyWith(status: FormzStatus.pure));
+    ProfileChangePasswordLoaded profileChangePasswordLoaded = state as ProfileChangePasswordLoaded;
+    emit(state.copyWith(status: profileChangePasswordLoaded.code != 200 ? 
+                                FormzStatus.pure
+                                : FormzStatus.submissionSuccess)
+        );
   }
 
   Future<void> _mapProfileOldPasswordChangedToState(ProfileOldPasswordChanged event, Emitter<ProfileChangePasswordState> emit) async {

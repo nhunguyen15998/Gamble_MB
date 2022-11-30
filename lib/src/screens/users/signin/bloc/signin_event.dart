@@ -7,6 +7,8 @@ abstract class SignInEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class SignInInitial extends SignInEvent {}
+
 class SignInPhoneChanged extends SignInEvent {
   const SignInPhoneChanged(this.phone);
 

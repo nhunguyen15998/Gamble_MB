@@ -155,7 +155,7 @@ class _HomeState extends State<Home> {
                               controller: blogController,
                               itemBuilder: (context, pagePosition) {
                                 return Container(
-                                  margin: const EdgeInsets.only(top:25, right: 15, left: 15, bottom: 40),
+                                  margin: const EdgeInsets.only(top:25, right: 15, left: 15, bottom: 10),
                                   decoration: const BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.all(Radius.circular(15))
@@ -204,7 +204,7 @@ class _HomeState extends State<Home> {
                   ),
                   //CONTACT
                   SizedBox(
-                    height: size.height*0.4,
+                    height: size.height*0.43,
                     width: size.width,
                     child: DecoratedBox(
                       decoration: const BoxDecoration(
@@ -216,10 +216,10 @@ class _HomeState extends State<Home> {
                         ),
                       ),
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left: 40),
+                            padding: const EdgeInsets.only(top: 30, left: 20),
                             child: Image.asset("lib/assets/images/cs-image.png", height: 220)
                           ),
                           Expanded(
@@ -241,6 +241,7 @@ class _HomeState extends State<Home> {
                                 Container(
                                   padding: const EdgeInsets.only(top: 5, right: 30, left: 15),
                                   child: Text("Our top priorities are to protect your privacy, provide secure transactions, and safeguard your data. When you're ready to play, registering an account is required so we know you're of legal age and so no one else can use your account.We answer the most commonly asked lotto questions",
+                                    textAlign: TextAlign.justify,
                                     style: TextStyle(
                                       fontFamily: "Play",
                                       fontSize: ratio * 22,

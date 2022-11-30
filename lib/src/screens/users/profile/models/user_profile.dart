@@ -11,7 +11,7 @@ class Profile extends Equatable {
   final String birth;
   final int gender;
   final String thumbnail;
-  final String wallpaper;
+  final String? wallpaper;
   final String createdAt;
   final int status; 
   final String balance; 

@@ -17,7 +17,7 @@ class ProfileEditBloc extends Bloc<ProfileEditEvent, ProfileEditState> {
     try {
       final currentUser = await profileService.getUserProfile();
       if(currentUser != null){
-        emit(ProfileEditLoaded(wallpaper: currentUser.wallpaper, 
+        emit(ProfileEditLoaded(wallpaper: currentUser.wallpaper ?? "", 
                                thumbnail: currentUser.thumbnail, 
                                firstName: currentUser.firstName, 
                                lastName: currentUser.lastName,

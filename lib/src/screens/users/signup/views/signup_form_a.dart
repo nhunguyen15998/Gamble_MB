@@ -4,10 +4,13 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gamble/src/screens/users/authentications/bloc/authentication_bloc.dart';
+import 'package:gamble/src/screens/users/signin/signin.dart';
 import 'package:gamble/src/screens/users/signup/bloc/signup_bloc.dart';
 // ignore: depend_on_referenced_packages
 import 'package:formz/formz.dart';
 import 'package:gamble/src/screens/users/signup/signup.dart';
+import 'package:gamble/src/services/authentication_service.dart';
 
 class SignUpFormA extends StatelessWidget {
   const SignUpFormA({Key? key}) : super(key: key);
@@ -50,17 +53,22 @@ class SignUpFormA extends StatelessWidget {
                       Text("Already a member? ",
                           style: TextStyle(
                               fontFamily: "Play",
-                              fontSize: ratio * 40,
+                              fontSize: ratio * 30,
                               color: const Color.fromRGBO(255, 255, 255, 1))),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(context, '/signin');
-                        },
-                        child: Text("Sign In",
-                            style: TextStyle(
-                                fontFamily: "Play",
-                                fontSize: ratio * 40,
-                                color: const Color.fromRGBO(233, 132, 41, 1))),
+                      BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                        builder: (context, state) { 
+                          return GestureDetector(
+                            onTap: () {
+                              context.read<AuthenticationBloc>().add(UserLogIn());
+                              // Navigator.pushNamed(context, '/signin');
+                            },
+                            child: Text("Sign In",
+                                style: TextStyle(
+                                    fontFamily: "Play",
+                                    fontSize: ratio * 30,
+                                    color: const Color.fromRGBO(233, 132, 41, 1))),
+                          );
+                        }
                       )
                     ],
                   ),

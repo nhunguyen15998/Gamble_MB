@@ -12,9 +12,11 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   final AuthenticationService _authenticationService;
 
   AuthenticationBloc(this._authenticationService)
-      : super(AuthenticationInitial()) {
+      : super(const AuthenticationState()) {
     on<AppLoaded>(_mapAppLoadedToState);
     on<UserLoggedIn>(_mapUserLoggedInToState);
+    on<UserRegister>(_mapUserRegisterToState);
+    on<UserLogIn>(_mapUserLogInToState);
     on<UserLoggedOut>(_mapUserLoggedOutToState);
   }
 
@@ -42,6 +44,14 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   Future<void> _mapUserLoggedInToState(
       UserLoggedIn event, Emitter<AuthenticationState> emit) async {
     emit(AuthenticationAuthenticated(user: event.user));
+  }
+
+  void _mapUserRegisterToState(UserRegister event, Emitter<AuthenticationState> emit) {
+    emit(AuthenticationRegistered());
+  }
+
+  void _mapUserLogInToState(UserLogIn event, Emitter<AuthenticationState> emit){
+    emit(AuthenticationNotAuthenticated());
   }
 
   Future<void> _mapUserLoggedOutToState(

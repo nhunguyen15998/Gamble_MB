@@ -84,6 +84,7 @@ class _UserProfileState extends State<UserProfile> with TickerProviderStateMixin
                 BlocBuilder<ProfileBloc, ProfileState>(
                   builder: (context, state) {
                     if(state is ProfileLoaded){
+                      String wallpaper = state.wallpaper.isNotEmpty ? dotenv.env['HOST']!+state.wallpaper : '${dotenv.env['HOST']!}images/defaults/section-bg.jpg';
                       return SizedBox(
                         height: size.height*0.38,
                         width: size.width,
@@ -92,7 +93,7 @@ class _UserProfileState extends State<UserProfile> with TickerProviderStateMixin
                           decoration: BoxDecoration(
                             image: DecorationImage(
                               alignment: Alignment.topCenter,
-                              image: NetworkImage(dotenv.env['HOST']!+state.wallpaper),
+                              image: NetworkImage(wallpaper),
                               fit: BoxFit.fitWidth
                             ),
                           ),
@@ -128,8 +129,8 @@ class _UserProfileState extends State<UserProfile> with TickerProviderStateMixin
                               ),
                               //UPLOAD AVATAR
                               Positioned(
-                                bottom: ratio*160,
-                                right: ratio*260,
+                                bottom: ratio*150,
+                                right: ratio*250,
                                 child: Container(
                                   height: ratio*70,
                                   width:  ratio*70,
@@ -306,7 +307,7 @@ class _UserProfileState extends State<UserProfile> with TickerProviderStateMixin
                               children: [
                                 Container(
                                   padding: const EdgeInsets.symmetric(vertical: 25),
-                                  height: size.height*0.15,
+                                  height: size.height*0.17,
                                   width: size.width,
                                   child: Column(
                                     children: [

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gamble/src/screens/users/authentications/bloc/authentication_bloc.dart';
 import 'package:gamble/src/screens/users/signin/bloc/signin_bloc.dart';
 // ignore: depend_on_referenced_packages
 import 'package:formz/formz.dart';
@@ -29,6 +30,7 @@ class SignInForm extends StatelessWidget {
           padding: const EdgeInsets.all(18),
           child: BlocBuilder<SignInBloc, SignInState>(
             builder: (context, state) {
+              print(state);
               Widget widget = const SizedBox();
               if(state.status == FormzStatus.submissionInProgress){
                 widget = const Center(child: CircularProgressIndicator());
@@ -76,7 +78,7 @@ class SignInForm extends StatelessWidget {
                                   Text("Rememeber",
                                       style: TextStyle(
                                           fontFamily: "Play",
-                                          fontSize: ratio * 40,
+                                          fontSize: ratio * 30,
                                           color:
                                               const Color.fromRGBO(255, 255, 255, 1)))
                                 ],
@@ -92,7 +94,7 @@ class SignInForm extends StatelessWidget {
                                           color:
                                               const Color.fromRGBO(255, 255, 255, 1),
                                           fontFamily: "Play",
-                                          fontSize: ratio * 40)),
+                                          fontSize: ratio * 30)),
                                 ),
                               ),
                             )
@@ -107,17 +109,22 @@ class SignInForm extends StatelessWidget {
                           Text("Don't have account? ",
                               style: TextStyle(
                                   fontFamily: "Play",
-                                  fontSize: ratio * 40,
+                                  fontSize: ratio * 30,
                                   color: const Color.fromRGBO(255, 255, 255, 1))),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(context, '/signup');
-                            },
-                            child: Text("Register",
-                                style: TextStyle(
-                                    fontFamily: "Play",
-                                    fontSize: ratio * 40,
-                                    color: const Color.fromRGBO(233, 132, 41, 1))),
+                          BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                            builder: (context, state) {
+                              return GestureDetector(
+                                onTap: () async {
+                                  context.read<AuthenticationBloc>().add(UserRegister());
+                                  //Navigator.pushNamed(context, '/signup');
+                                },
+                                child: Text("Register",
+                                    style: TextStyle(
+                                        fontFamily: "Play",
+                                        fontSize: ratio * 30,
+                                        color: const Color.fromRGBO(233, 132, 41, 1))),
+                              );
+                            }
                           )
                         ],
                       ),

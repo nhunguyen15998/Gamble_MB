@@ -115,7 +115,7 @@ class SignUpFormB extends StatelessWidget {
                       Text("Already a member? ",
                           style: TextStyle(
                               fontFamily: "Play",
-                              fontSize: ratio * 40,
+                              fontSize: ratio * 30,
                               color: const Color.fromRGBO(255, 255, 255, 1))),
                       GestureDetector(
                         onTap: () {
@@ -124,7 +124,7 @@ class SignUpFormB extends StatelessWidget {
                         child: Text("Sign In",
                             style: TextStyle(
                                 fontFamily: "Play",
-                                fontSize: ratio * 40,
+                                fontSize: ratio * 30,
                                 color: const Color.fromRGBO(233, 132, 41, 1))),
                       )
                     ],

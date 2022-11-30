@@ -103,7 +103,6 @@ class _BlogSearchInputState extends State<BlogSearchInput> {
             )
           ),
           onChanged: (value) {
-
             context.read<BlogBloc>().add(BlogSearchChanged(search: value, page: 1));
           },
         )
@@ -194,13 +193,16 @@ class _BlogSearchBodyState extends State<BlogSearchBody> {
                   return const SizedBox();
                 }
                 if(index >= blogs.length){
-                  return Container(
-                    padding: EdgeInsets.only(bottom: ratio*20),
-                    alignment: Alignment.center,
-                    child: const Center(
-                      child: CircularProgressIndicator()
-                    ),
-                  );
+                  if(blogs.length >= 4){
+                    return Container(
+                      padding: EdgeInsets.only(bottom: ratio*20),
+                      alignment: Alignment.center,
+                      child: const Center(
+                        child: CircularProgressIndicator()
+                      ),
+                    );
+                  }
+                  return const SizedBox();
                 }
                 Blog blog = blogs[index];
                 return ListTile(

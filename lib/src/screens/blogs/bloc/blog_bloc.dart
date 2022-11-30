@@ -93,18 +93,17 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
       final page = event.page;
       final search = event.search;
       print(state);
-      if(search!.isEmpty){
+      if(search!.trim().isEmpty){
         emit(BlogSearchInitialized());
       }
-      if(search.isNotEmpty && page == 1){
+      if(search.trim().isNotEmpty && page == 1){
         emit(BlogSearchLoading());
-        // await Future.delayed(const Duration(seconds: 2));
         blogs = await blogService.searchBlog(search, page);
         emit(blogs.isEmpty ? 
              BlogSearchNotFound() : 
              BlogSearchLoaded(blogSearchs: blogs, search: search, page: page));
       } 
-      if(search.isNotEmpty && page != 1){
+      if(search.trim().isNotEmpty && page != 1){
         BlogSearchLoaded blogSearchLoaded = state as BlogSearchLoaded;
         blogs = await blogService.searchBlog(search, page);
         emit(blogs.isEmpty ? 

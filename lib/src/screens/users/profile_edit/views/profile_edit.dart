@@ -99,7 +99,8 @@ class _ProfileEditBodyState extends State<ProfileEditBody> {
                   child: BlocBuilder<ProfileEditBloc, ProfileEditState>(
                     builder: (context, state) {
                       if(state is ProfileEditLoaded){
-                        return Image.network(dotenv.env['HOST']!+state.thumbnail, height: ratio*250, width: ratio*250, fit: BoxFit.cover);
+                        String thumbnail = state.thumbnail.isNotEmpty ? dotenv.env['HOST']!+state.thumbnail : '${dotenv.env['HOST']!}images/defaults/section-bg.jpg';
+                        return Image.network(thumbnail, height: ratio*250, width: ratio*250, fit: BoxFit.cover);
                       }
                       return const CircularProgressIndicator();
                     },
@@ -117,7 +118,8 @@ class _ProfileEditBodyState extends State<ProfileEditBody> {
                   child: BlocBuilder<ProfileEditBloc, ProfileEditState>(
                     builder: (context, state) {
                       if(state is ProfileEditLoaded){
-                        return Image.network(dotenv.env['HOST']!+state.wallpaper, fit: BoxFit.cover);
+                        String wallpaper = state.wallpaper.isNotEmpty ? dotenv.env['HOST']!+state.wallpaper : '${dotenv.env['HOST']!}images/defaults/section-bg.jpg';
+                        return Image.network(wallpaper, fit: BoxFit.cover);
                       }
                       return const CircularProgressIndicator();
                     },

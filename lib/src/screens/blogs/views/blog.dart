@@ -398,7 +398,7 @@ class _BlogBreakingNewsItemState extends State<BlogBreakingNewsItem> with Single
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: Text(latestBlogs[pagePosition].title!,
                     overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
+                    maxLines: 1,
                     textAlign: TextAlign.justify,
                     style: TextStyle(
                       color: const Color.fromRGBO(31, 6, 68, 1),

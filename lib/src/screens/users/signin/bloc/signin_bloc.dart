@@ -17,12 +17,18 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
 
   SignInBloc(this._authenticationBloc, this._authenticationService)
       : super(const SignInState()) {
+    // on<SignInInitial>(_mapSignInInitialToState);
     on<SignInPhoneChanged>(_mapPhoneChangedToState);
     on<SignInPasswordChanged>(_mapPasswordChangedToState);
     on<SignInShowPasswordChanged>(_mapShowPasswordChangedToState);
     on<SignInSubmitted>(_mapSignInSubmittedToState);
     on<SignInAlertBtnOKClicked>(_mapSignInAlertBtnOKClickedToState);
   }
+
+  // void _mapSignInInitialToState(SignInInitial event, Emitter<SignInState> emit) {
+  //   _authenticationBloc.emit(AuthenticationNotAuthenticated());
+  //   emit(state.copyWith(status: FormzStatus.pure));
+  // }
 
   void _mapPhoneChangedToState(
     SignInPhoneChanged event,

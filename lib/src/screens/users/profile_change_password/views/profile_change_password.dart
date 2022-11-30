@@ -4,7 +4,11 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gamble/src/screens/master/views/master.dart';
+import 'package:gamble/src/screens/users/authentications/bloc/authentication_bloc.dart';
 import 'package:gamble/src/screens/users/profile_change_password/bloc/profile_change_password_bloc.dart';
+import 'package:gamble/src/screens/users/signin/views/signin_page.dart';
+import 'package:gamble/src/services/authentication_service.dart';
 import 'package:gamble/src/services/profile_service.dart';
 import 'package:formz/formz.dart';
 import 'package:gamble/src/utils/helpers.dart';
@@ -29,111 +33,135 @@ class _ProfileChangePasswordState extends State<ProfileChangePassword> {
     
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
-      child: RepositoryProvider(
-        create: (context) => ProfileManagement(),
-        child: BlocProvider(
-          create: (context) => ProfileChangePasswordBloc(RepositoryProvider.of<ProfileManagement>(context))..add(ProfileChangePasswordEvent()),
-          child: Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                focusColor: const Color.fromRGBO(250, 0, 159, 1),
-                icon: const Icon(FontAwesomeIcons.chevronLeft),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              centerTitle: true,
-              title: Text('Change password', 
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Play',
-                  fontSize: ratio*40
-                ),
-              ),
-              backgroundColor: const Color.fromRGBO(31, 6, 68, 1),
-              shadowColor: Colors.transparent,
-            ),
-            backgroundColor: const Color.fromRGBO(31, 6, 68, 1),
-            body: SingleChildScrollView(
-              child: BlocBuilder<ProfileChangePasswordBloc, ProfileChangePasswordState>(
-                builder: (context, state) {
-                  Widget widget = const SizedBox();
-                  if(state is ProfileChangePasswordLoading){
-                    widget = const Center(child: CircularProgressIndicator());
-                  }
-                  if(state is ProfileChangePasswordLoaded){
-                    ProfileChangePasswordLoaded profileChangePasswordLoaded = state;
-                    widget = AlertDialog(
-                      icon: profileChangePasswordLoaded.code == 200 ? 
-                              const Icon(Icons.check_circle): const Icon(Icons.error_outline_rounded),
-                      content: Text(profileChangePasswordLoaded.message),
-                      actions: <Widget>[
-                        TextButton(
-                          child: const Text('OK'),
-                          onPressed: () {
-                            context.read<ProfileChangePasswordBloc>().add(ProfileAlertBtnOKClicked());
-                            oldPasswordController.text = "";
-                            newPasswordController.text = "";
-                            confirmPasswordController.text = "";
-                          },
-                        ),
-                      ],
-                    );
-                  }
-                  return Stack(
-                    children: [
-                      Column(
-                        children: [
-                          ChangePasswordOldPasswordInput(textEditingController: oldPasswordController),
-                          ChangePasswordNewPasswordInput(textEditingController: newPasswordController,),
-                          ChangePasswordConfimationPasswordInput(textEditingController: confirmPasswordController,),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 40, left: 20, right: 20),
-                            child: SizedBox(
-                              width: double.infinity,
-                              height: ratio * 100,
-                              child: ElevatedButton(
-                                style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                        const Color.fromRGBO(250, 0, 159, 1)),
-                                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(ratio * 50)))),
-                                key: const Key('ProfileChangePassword_saveBtn'),
-                                onPressed: state.status == FormzStatus.valid ?
-                                () {
-                                  context.read<ProfileChangePasswordBloc>().add(ProfileBtnChangePasswordClicked());
-                                } : null,
-                                child: Text('Save'.toUpperCase(),
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: ratio * 40,
-                                    fontFamily: "Play"
+      child: BlocProvider<AuthenticationBloc>(
+        create: (context) {
+          final authenticationService = FakeAuthenticationService();
+          var authenticationBloc = AuthenticationBloc(authenticationService);
+          return authenticationBloc;
+        },
+        child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          builder: (context, state) {
+            if(state is AuthenticationLoading){
+              return const Center(child: CircularProgressIndicator());
+            }
+            if(state is AuthenticationNotAuthenticated){
+              return const SignIn();
+            }
+            if (state is AuthenticationAuthenticated) {
+              return const Master(index: 0);
+            }
+            return RepositoryProvider(
+              create: (context) => ProfileManagement(),
+              child: BlocProvider(
+                create: (context) => ProfileChangePasswordBloc(RepositoryProvider.of<ProfileManagement>(context))..add(ProfileChangePasswordEvent()),
+                child: Scaffold(
+                  appBar: AppBar(
+                    leading: IconButton(
+                      focusColor: const Color.fromRGBO(250, 0, 159, 1),
+                      icon: const Icon(FontAwesomeIcons.chevronLeft),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    centerTitle: true,
+                    title: Text('Change password', 
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Play',
+                        fontSize: ratio*40
+                      ),
+                    ),
+                    backgroundColor: const Color.fromRGBO(31, 6, 68, 1),
+                    shadowColor: Colors.transparent,
+                  ),
+                  backgroundColor: const Color.fromRGBO(31, 6, 68, 1),
+                  body: SingleChildScrollView(
+                    child: BlocBuilder<ProfileChangePasswordBloc, ProfileChangePasswordState>(
+                      builder: (context, state) {
+                        Widget widget = const SizedBox();
+                        if(state is ProfileChangePasswordLoading){
+                          widget = const Center(child: CircularProgressIndicator());
+                        }
+                        if(state is ProfileChangePasswordLoaded){
+                          ProfileChangePasswordLoaded profileChangePasswordLoaded = state;
+                          widget = AlertDialog(
+                            icon: profileChangePasswordLoaded.code == 200 ? 
+                                    const Icon(Icons.check_circle): const Icon(Icons.error_outline_rounded),
+                            content: Text(profileChangePasswordLoaded.code != 200 ? profileChangePasswordLoaded.message : "New password applied. Please sign in again to continue using"),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text('Ok'),
+                                onPressed: () {
+                                  context.read<ProfileChangePasswordBloc>().add(ProfileAlertBtnOKClicked());
+                                  oldPasswordController.text = "";
+                                  newPasswordController.text = "";
+                                  confirmPasswordController.text = "";
+                                  if(state.code == 200){
+                                    context.read<AuthenticationBloc>().add(UserLoggedOut());
+                                  }
+                                },
+                              ),
+                            ],
+                          );
+                        }
+                        return Stack(
+                          children: [
+                            Column(
+                              children: [
+                                ChangePasswordOldPasswordInput(textEditingController: oldPasswordController),
+                                ChangePasswordNewPasswordInput(textEditingController: newPasswordController,),
+                                ChangePasswordConfimationPasswordInput(textEditingController: confirmPasswordController,),
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 40, left: 20, right: 20),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    height: ratio * 100,
+                                    child: ElevatedButton(
+                                      style: ButtonStyle(
+                                          backgroundColor: MaterialStateProperty.all(
+                                              const Color.fromRGBO(250, 0, 159, 1)),
+                                          shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(ratio * 50)))),
+                                      key: const Key('ProfileChangePassword_saveBtn'),
+                                      onPressed: state.status == FormzStatus.valid ?
+                                      () {
+                                        context.read<ProfileChangePasswordBloc>().add(ProfileBtnChangePasswordClicked());
+                                      } : null,
+                                      child: Text('Save'.toUpperCase(),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: ratio * 40,
+                                          fontFamily: "Play"
+                                        )
+                                      ),
+                                    )
                                   )
+                                )
+                              ]
+                            ),
+                            state is ProfileChangePasswordLoaded || state is ProfileChangePasswordLoading?
+                            Positioned(
+                              child: Container(
+                                width: size.width,
+                                height: size.height,
+                                //color: const Color.fromARGB(0, 31, 6, 68),
+                                child: Center(
+                                  child: widget
                                 ),
                               )
-                            )
-                          )
-                        ]
-                      ),
-                      state is ProfileChangePasswordLoaded || state is ProfileChangePasswordLoading?
-                      Positioned(
-                        child: Container(
-                          width: size.width,
-                          height: size.height,
-                          //color: const Color.fromARGB(0, 31, 6, 68),
-                          child: Center(
-                            child: widget
-                          ),
-                        )
-                      ) : const SizedBox() 
-                    ]
-                  );
-                }
-              )
-            )
-          )
-        ),
+                            ) : const SizedBox() 
+                          ]
+                        );
+                      }
+                    )
+                  )
+                
+                )
+              ),
+            );
+          }
+        )
       )
     );
   }

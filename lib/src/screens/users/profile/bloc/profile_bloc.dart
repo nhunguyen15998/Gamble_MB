@@ -17,7 +17,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     try {
       final currentUser = await profileService.getUserProfile();
       if(currentUser != null){
-        emit(ProfileLoaded(wallpaper: currentUser.wallpaper, 
+        emit(ProfileLoaded(wallpaper: currentUser.wallpaper ?? "", 
                            thumbnail: currentUser.thumbnail, 
                            name: '${currentUser.firstName} ${currentUser.lastName}',
                            balance: currentUser.balance));

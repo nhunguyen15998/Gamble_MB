@@ -5,17 +5,18 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 // ignore: depend_on_referenced_packages
 import 'package:formz/formz.dart';
+import 'package:gamble/src/screens/users/authentications/bloc/authentication_bloc.dart';
 import 'package:gamble/src/screens/users/signup/signup.dart';
 import 'package:gamble/src/services/service.dart';
-import 'package:gamble/src/screens/users/authentications/authentication.dart';
 
 part 'signup_event.dart';
 part 'signup_state.dart';
 
 class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   final AuthenticationService _authenticationService;
+  final AuthenticationBloc _authenticationBloc;
 
-  SignUpBloc(this._authenticationService):super(const SignUpState()) {
+  SignUpBloc(this._authenticationService, this._authenticationBloc):super(const SignUpState()) {
     on<SignUpFirstNameChanged>(_mapSignUpFirstNameChangedToState);
     on<SignUpLastNameChanged>(_mapSignUpLastNameChangedToState);
     on<SignUpPhoneChanged>(_mapPhoneChangedToState);
@@ -96,6 +97,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
         state.email.value, state.phone.value, 
         state.password.value, state.confirmedPassword.value);
       if(result['code'] == 200){
+        _authenticationBloc.emit(AuthenticationNotAuthenticated());
         emit(state.copyWith(status: FormzStatus.submissionSuccess));
       } else {
         emit(state.copyWith(status: FormzStatus.submissionFailure, error: result['message']));

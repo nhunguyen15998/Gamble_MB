@@ -636,11 +636,17 @@ class _ProfileEditInfoGenderRadioGroupState extends State<ProfileEditInfoGenderR
             ),
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: ListTile(
                   textColor: Colors.white,
-                  title: const Text('Male'),
+                  title: Text('Male', 
+                    style: TextStyle(
+                      fontSize: ratio*29,
+                      fontFamily: 'Play'
+                    )
+                  ),
                   horizontalTitleGap: 0,
                   leading: Radio<Genders>(
                     fillColor: const MaterialStatePropertyAll(Colors.white),
@@ -658,7 +664,12 @@ class _ProfileEditInfoGenderRadioGroupState extends State<ProfileEditInfoGenderR
               Expanded(
                 child: ListTile(
                   textColor: Colors.white,
-                  title: const Text('Female'),
+                  title: Text('Female',
+                    style: TextStyle(
+                      fontSize: ratio*29,
+                      fontFamily: 'Play'
+                    )
+                  ),
                   horizontalTitleGap: 0,
                   leading: Radio<Genders>(
                     fillColor: const MaterialStatePropertyAll(Colors.white),
@@ -674,10 +685,14 @@ class _ProfileEditInfoGenderRadioGroupState extends State<ProfileEditInfoGenderR
                 )
               ),
               Expanded(
-                flex: 1,
                 child: ListTile(
                   textColor: Colors.white,
-                  title: const Text('Other'),
+                  title: Text('Other',
+                    style: TextStyle(
+                      fontSize: ratio*29,
+                      fontFamily: 'Play'
+                    )
+                  ),
                   horizontalTitleGap: 0,
                   leading: Radio<Genders>(
                     fillColor: const MaterialStatePropertyAll(Colors.white),

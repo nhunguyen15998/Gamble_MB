@@ -10,7 +10,7 @@ class ProfileState extends Equatable {
 class ProfileInitialized extends ProfileState {}
 
 class ProfileLoaded extends ProfileState {
-  ProfileLoaded({required this.wallpaper, required this.thumbnail, required this.name, required this.balance});
+  ProfileLoaded({this.wallpaper = "", required this.thumbnail, required this.name, required this.balance});
 
   String wallpaper;
   String thumbnail;
