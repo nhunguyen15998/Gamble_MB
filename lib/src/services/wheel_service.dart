@@ -25,7 +25,7 @@ class WheelManagement extends WheelService {
     var token = await Helpers.getCurrentToken();
     headers.addAll(<String, String>{"auth" : token.toString()});
     try {
-      final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/getSliceArrays"), headers: headers);
+      final response = await http.get(Uri.parse("${dotenv.env['HOST']!}/api/getSliceArrays"), headers: headers);
       if(response.statusCode == 200){
         var jsonData = jsonDecode(response.body) as Map<String, dynamic>;
         var balance = jsonData.entries.firstWhere((e) => e.key == 'balance').value;
@@ -68,7 +68,7 @@ class WheelManagement extends WheelService {
         "betAmount": betAmount,
         "isPartialBet" : isPartialBet
       });
-      final response = await http.post(Uri.parse("${dotenv.env['HOST']!}api/wheels/result"), headers: headers, body: requestBody);
+      final response = await http.post(Uri.parse("${dotenv.env['HOST']!}/api/wheels/result"), headers: headers, body: requestBody);
       if(response.statusCode == 200){
         var jsonData = jsonDecode(response.body) as Map<String, dynamic>;
         var code = jsonData.entries.firstWhere((e) => e.key == 'code').value;

@@ -68,7 +68,6 @@ class WalletWithdrawBitcoinInitialized extends WalletWithdrawState {
     this.status = FormzStatus.invalid,
     this.bitcoinAmount = const BitcoinAmount.pure(),
     this.address = const Address.pure(),
-    this.transactionCode = '',
     this.isBtnDisabled = false,
     this.bitcoinExRate = 0,
     this.bitcoinBalance = 0,
@@ -78,7 +77,6 @@ class WalletWithdrawBitcoinInitialized extends WalletWithdrawState {
   FormzStatus status;
   BitcoinAmount bitcoinAmount;
   Address address;
-  String transactionCode;
   bool isBtnDisabled;
   double bitcoinExRate;
   double bitcoinBalance;
@@ -88,7 +86,6 @@ class WalletWithdrawBitcoinInitialized extends WalletWithdrawState {
     FormzStatus? status,
     BitcoinAmount? bitcoinAmount,
     Address? address,
-    String? transactionCode,
     bool? isBtnDisabled,
     double? bitcoinExRate,
     double? bitcoinBalance,
@@ -98,7 +95,6 @@ class WalletWithdrawBitcoinInitialized extends WalletWithdrawState {
       status: status ?? this.status,
       bitcoinAmount: bitcoinAmount ?? this.bitcoinAmount,
       address: address ?? this.address,
-      transactionCode: transactionCode ?? this.transactionCode,
       isBtnDisabled: isBtnDisabled ?? this.isBtnDisabled,
       bitcoinExRate: bitcoinExRate ?? this.bitcoinExRate,
       bitcoinBalance: bitcoinBalance ?? this.bitcoinBalance,
@@ -107,7 +103,7 @@ class WalletWithdrawBitcoinInitialized extends WalletWithdrawState {
   }
 
   @override
-  List<Object?> get props => [status, bitcoinAmount, address, transactionCode, 
+  List<Object?> get props => [status, bitcoinAmount, address,  
                               isBtnDisabled, bitcoinExRate, bitcoinBalance, tempBitcoinBalance];
 }
 

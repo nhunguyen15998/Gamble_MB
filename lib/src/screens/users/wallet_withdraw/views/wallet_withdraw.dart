@@ -796,20 +796,6 @@ class WithdrawBitcoinAddressInput extends StatefulWidget {
 }
 
 class _WithdrawBitcoinAddressInputState extends State<WithdrawBitcoinAddressInput> {
-  late WalletWithdrawBloc walletWithdrawBloc;
-  late TextEditingController addressController;
-  late String _address;
-
-  @override
-  void initState() {
-    super.initState();
-    addressController = TextEditingController();
-    walletWithdrawBloc = context.read<WalletWithdrawBloc>();
-  }
-
-  Future<Map<String, dynamic>> _getBCAddress(){
-    return walletWithdrawBloc.transactionService.getBCAddress();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -823,9 +809,7 @@ class _WithdrawBitcoinAddressInputState extends State<WithdrawBitcoinAddressInpu
             padding: const EdgeInsets.only(top: 20, bottom: 20, left: 20, right: 20),
             child: TextField(
               key: const Key('WalletWithdraw_addressBitcoinField'),
-              controller: addressController,
               keyboardType: TextInputType.text,
-              readOnly: true,
               style: const TextStyle(color: Color.fromRGBO(255, 255, 255, 1)),
               decoration: InputDecoration(
                 labelText: 'Bitcoin address',
@@ -833,19 +817,6 @@ class _WithdrawBitcoinAddressInputState extends State<WithdrawBitcoinAddressInpu
                   fontSize: ratio * 35,
                   color: const Color.fromRGBO(255, 255, 255, 1),
                   fontFamily: "Play"
-                ),
-                suffixIcon: IconButton(
-                  onPressed: () async {
-                    var result = await _getBCAddress();
-                    var address = result['bcaddress'];
-                    var transactionCode = result['transactionCode'];
-                    addressController.value = TextEditingValue(text: address);
-                    walletWithdrawBloc.add(WalletWithdrawAddressButtonClicked(address: address, transactionCode: transactionCode));
-                  },
-                  style: const ButtonStyle(
-                    alignment: Alignment.centerRight
-                  ),
-                  icon: Image.asset('lib/assets/images/bitcoin.png')
                 ),
                 errorStyle: const TextStyle(color: Color.fromARGB(255, 195, 66, 66)),
                 errorText: state.address.invalid ? 'Address is required' : null,
@@ -872,6 +843,7 @@ class _WithdrawBitcoinAddressInputState extends State<WithdrawBitcoinAddressInpu
                 color: Color.fromRGBO(218, 62, 59, 1), width: 1)
                 )
               ),
+              onChanged: (value) => context.read<WalletWithdrawBloc>().add(WalletWithdrawAddressChanged(address: value)),
             )
           );
         }
@@ -954,7 +926,6 @@ class _WithdrawBitcoinProceedButtonState extends State<WithdrawBitcoinProceedBut
                     var withdrawBitcoin = {
                       "bitcoin_amount": walletWithdrawBitcoin.bitcoinAmount.value,
                       "bcaddress": walletWithdrawBitcoin.address.value,
-                      "transaction_code": walletWithdrawBitcoin.transactionCode
                     };
                     var result = await _bitcoinWithdraw(jsonEncode(withdrawBitcoin), 'withdrawBitcoinProccess');
                     var code = result['code'];

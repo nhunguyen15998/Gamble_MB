@@ -27,7 +27,7 @@ class WalletWithdrawBloc extends Bloc<WalletWithdrawEvent, WalletWithdrawState> 
 
     on<WalletWithdrawBitcoinInitial>(_mapWalletWithdrawBitcoinInitialToState);
     on<WalletWithdrawBitcoinAmountChanged>(_mapWalletWithdrawBitcoinAmountChangedToState);
-    on<WalletWithdrawAddressButtonClicked>(_mapWalletWithdrawAddressChangedToState);
+    on<WalletWithdrawAddressChanged>(_mapWalletWithdrawAddressChangedToState);
     on<WalletWithdrawBitcoinRequestSubmitted>(_mapWalletWithdrawBitcoinRequestSubmittedToState);
   }
   
@@ -114,12 +114,11 @@ class WalletWithdrawBloc extends Bloc<WalletWithdrawEvent, WalletWithdrawState> 
     emit(walletWithdrawBitcoin.copyWith(bitcoinAmount: amount, status: isValid, tempBitcoinBalance: balanceUpdated));
   }
 
-  Future<void> _mapWalletWithdrawAddressChangedToState(WalletWithdrawAddressButtonClicked event, Emitter<WalletWithdrawState> emit) async {
+  Future<void> _mapWalletWithdrawAddressChangedToState(WalletWithdrawAddressChanged event, Emitter<WalletWithdrawState> emit) async {
     final bcAddress = Address.dirty(event.address);
-    final transactionCode = event.transactionCode;
     WalletWithdrawBitcoinInitialized walletWithdrawBitcoin = state as WalletWithdrawBitcoinInitialized;
     var isValid = Formz.validate([bcAddress, walletWithdrawBitcoin.bitcoinAmount]);
-    emit(walletWithdrawBitcoin.copyWith(status: isValid, address: bcAddress, transactionCode: transactionCode));
+    emit(walletWithdrawBitcoin.copyWith(status: isValid, address: bcAddress));
   }
 
   Future<void> _mapWalletWithdrawBitcoinRequestSubmittedToState(WalletWithdrawBitcoinRequestSubmitted event, Emitter<WalletWithdrawState> emit) async {

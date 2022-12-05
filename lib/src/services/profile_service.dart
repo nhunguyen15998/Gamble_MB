@@ -23,7 +23,7 @@ class ProfileManagement extends ProfileService {
     var token = await Helpers.getCurrentToken();
     headers.addAll(<String, String>{"auth" : token.toString()});
     try {
-      final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/get-user"), headers: headers);
+      final response = await http.get(Uri.parse("${dotenv.env['HOST']!}/api/get-user"), headers: headers);
       if (response.statusCode == 200) {
         print(jsonDecode(response.body));
         return Profile.fromJson(jsonDecode(response.body));
@@ -46,7 +46,7 @@ class ProfileManagement extends ProfileService {
         "birth": profileUpdate.birth,
         "gender": '${profileUpdate.gender}'
       });
-      final response = await http.post(Uri.parse("${dotenv.env['HOST']!}api/update-user"), headers: headers, body: requestBody);
+      final response = await http.post(Uri.parse("${dotenv.env['HOST']!}/api/update-user"), headers: headers, body: requestBody);
       Map<String, dynamic> jsonData = json.decode(response.body) as Map<String, dynamic>;
       if (response.statusCode == 200) {
         var code = jsonData.entries.firstWhere((e) => e.key == 'code').value;
@@ -69,7 +69,7 @@ class ProfileManagement extends ProfileService {
     var token = await Helpers.getCurrentToken();
     headers.addAll(<String, String>{"auth" : token.toString()});
     try {
-      final response = await http.post(Uri.parse("${dotenv.env['HOST']!}api/user/change-password"), headers: headers, body: request);
+      final response = await http.post(Uri.parse("${dotenv.env['HOST']!}/api/user/change-password"), headers: headers, body: request);
       Map<String, dynamic> jsonData = json.decode(response.body) as Map<String, dynamic>;
       if (response.statusCode == 200) {
         var code = jsonData.entries.firstWhere((e) => e.key == 'code').value;

@@ -52,7 +52,7 @@ class TransactionItemDetail extends Equatable {
       receiver: json['receiver'],
       createdAt: DateFormat("dd/MM/yyyy - HH:MM:ss").format(DateTime.parse(json['transaction_created_at'])).toString(),
       status: json['transaction_status'],
-      amount: NumberFormat.currency(customPattern: "#,###.", decimalDigits: 4).format(json['amount']),
+      amount: NumberFormat.currency(customPattern: "#,###.", decimalDigits: 7).format(json['amount']),
       senderName: json['sender_first_name'] != null && json['sender_last_name'] != null ? json['sender_first_name']+" "+json['sender_last_name'] : null,
       receiverName: json['receiver_first_name'] != null && json['receiver_last_name'] != null ? json['receiver_first_name']+" "+json['receiver_last_name'] : null,
       bcaddress: json['bcaddress'],

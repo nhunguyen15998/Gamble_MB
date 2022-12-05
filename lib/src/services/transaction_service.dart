@@ -38,7 +38,7 @@ class TransactionManagement extends TransactionService {
     var token = await Helpers.getCurrentToken();
     headers.addAll(<String, String>{"auth" : token.toString()});
     try {
-      final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/getExRateAndBalance?name=$currency"), headers: headers);
+      final response = await http.get(Uri.parse("${dotenv.env['HOST']!}/api/getExRateAndBalance?name=$currency"), headers: headers);
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body) as Map<String, dynamic>;
         var balance = jsonData.entries.firstWhere((e) => e.key == 'balance').value;
@@ -62,7 +62,7 @@ class TransactionManagement extends TransactionService {
         'amount': amount,
         'method': method,
       });
-      final response = await http.post(Uri.parse("${dotenv.env['HOST']!}api/depositProcess"), headers: headers, body: requestBody);
+      final response = await http.post(Uri.parse("${dotenv.env['HOST']!}/api/depositProcess"), headers: headers, body: requestBody);
       if (response.statusCode == 200) {
         var vnpay = VNPay.fromJson(jsonDecode(response.body));
         return vnpay;
@@ -98,7 +98,7 @@ class TransactionManagement extends TransactionService {
     var token = await Helpers.getCurrentToken();
     headers.addAll(<String, String>{"auth" : token.toString()});
     try {
-      final response = await http.post(Uri.parse("${dotenv.env['HOST']!}api/$path"), headers: headers, body: withdrawBank);
+      final response = await http.post(Uri.parse("${dotenv.env['HOST']!}/api/$path"), headers: headers, body: withdrawBank);
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body) as Map<String, dynamic>;
         var code = jsonData.entries.firstWhere((e) => e.key == 'code').value;
@@ -120,7 +120,7 @@ class TransactionManagement extends TransactionService {
     var token = await Helpers.getCurrentToken();
     headers.addAll(<String, String>{"auth" : token.toString()});
     try {
-      final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/generateBCAddress"), headers: headers);
+      final response = await http.get(Uri.parse("${dotenv.env['HOST']!}/api/generateBCAddress"), headers: headers);
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body) as Map<String, dynamic>;
         var bcaddress = jsonData.entries.firstWhere((e) => e.key == 'bcaddress').value;
@@ -140,7 +140,7 @@ class TransactionManagement extends TransactionService {
     var token = await Helpers.getCurrentToken();
     headers.addAll(<String, String>{"auth" : token.toString()});
     try {
-      final response = await http.post(Uri.parse("${dotenv.env['HOST']!}api/$path"), headers: headers, body: withdrawBitcoin);
+      final response = await http.post(Uri.parse("${dotenv.env['HOST']!}/api/$path"), headers: headers, body: withdrawBitcoin);
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body) as Map<String, dynamic>;
         var code = jsonData.entries.firstWhere((e) => e.key == 'code').value;
@@ -165,7 +165,7 @@ class TransactionManagement extends TransactionService {
     var token = await Helpers.getCurrentToken();
     headers.addAll(<String, String>{"auth" : token.toString()});
     try {
-      final response = await http.post(Uri.parse("${dotenv.env['HOST']!}api/$path"), headers: headers, body: transfer);
+      final response = await http.post(Uri.parse("${dotenv.env['HOST']!}/api/$path"), headers: headers, body: transfer);
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body) as Map<String, dynamic>;
         var code = jsonData.entries.firstWhere((e) => e.key == 'code').value;
@@ -189,7 +189,7 @@ class TransactionManagement extends TransactionService {
     var token = await Helpers.getCurrentToken();
     headers.addAll(<String, String>{"auth" : token.toString()});
     try {
-      final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/user/transactions?page=$page"), headers: headers);
+      final response = await http.get(Uri.parse("${dotenv.env['HOST']!}/api/user/transactions?page=$page"), headers: headers);
       if (response.statusCode == 200) {
         List<TransactionListItem> list = <TransactionListItem>[];
         for (var item in jsonDecode(response.body)) {
@@ -210,7 +210,7 @@ class TransactionManagement extends TransactionService {
     var token = await Helpers.getCurrentToken();
     headers.addAll(<String, String>{"auth" : token.toString()});
     try {
-      final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/user/transaction?transactionId=$transactionId"), headers: headers);
+      final response = await http.get(Uri.parse("${dotenv.env['HOST']!}/api/user/transaction?transactionId=$transactionId"), headers: headers);
       if (response. statusCode == 200) {
         return TransactionItemDetail.fromJson(jsonDecode(response.body));
       } else {

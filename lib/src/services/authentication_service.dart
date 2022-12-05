@@ -23,7 +23,7 @@ class FakeAuthenticationService extends AuthenticationService {
   Future<User?> getCurrentUser() async {
     var token = await Helpers.getCurrentToken();
     headers.addAll(<String, String>{"auth" : token.toString()});
-    var result = await http.get(Uri.parse('${dotenv.env['HOST']!}api/get-user'), headers: headers);
+    var result = await http.get(Uri.parse('${dotenv.env['HOST']!}/api/get-user'), headers: headers);
     Map<String, dynamic> jsonData = json.decode(result.body) as Map<String, dynamic>;
     if(jsonData['phone'] != null){
       return User.fromJson(jsonData);
@@ -39,7 +39,7 @@ class FakeAuthenticationService extends AuthenticationService {
       'plain_password': password,
     });
     try {
-      final response = await http.post(Uri.parse('${dotenv.env['HOST']!}api/user/authenticate'), body: requestBody, headers: headers);
+      final response = await http.post(Uri.parse('${dotenv.env['HOST']!}/api/user/authenticate'), body: requestBody, headers: headers);
       Map<String, dynamic> jsonData = json.decode(response.body) as Map<String, dynamic>;
       if (response.statusCode == 200) {
         var code = jsonData.entries.firstWhere((e) => e.key == 'code').value;
@@ -77,7 +77,7 @@ class FakeAuthenticationService extends AuthenticationService {
       'confirm_password': confirmedPassword
     });
     try {
-      final response = await http.post(Uri.parse('${dotenv.env['HOST']!}api/user/register'), body: requestBody, headers: headers);
+      final response = await http.post(Uri.parse('${dotenv.env['HOST']!}/api/user/register'), body: requestBody, headers: headers);
       Map<String, dynamic> jsonData = json.decode(response.body) as Map<String, dynamic>;
       if (response.statusCode == 200) {
         var code = jsonData.entries.firstWhere((e) => e.key == 'code').value;

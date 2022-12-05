@@ -72,12 +72,11 @@ class WalletWithdrawBitcoinAmountChanged extends WalletWithdrawEvent {
   @override
   List<Object?> get props => [bitcoinAmount];
 }
-class WalletWithdrawAddressButtonClicked extends WalletWithdrawEvent {
-  WalletWithdrawAddressButtonClicked({required this.address, required this.transactionCode});
+class WalletWithdrawAddressChanged extends WalletWithdrawEvent {
+  WalletWithdrawAddressChanged({required this.address});
   String address;
-  String transactionCode;
   @override
-  List<Object?> get props => [address, transactionCode];
+  List<Object?> get props => [address];
 }
 class WalletWithdrawBitcoinRequestSubmitted extends WalletWithdrawEvent {
   WalletWithdrawBitcoinRequestSubmitted({this.isBtnDisabled = false});

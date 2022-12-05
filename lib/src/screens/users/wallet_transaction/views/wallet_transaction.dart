@@ -132,14 +132,20 @@ class _TransactionListState extends State<TransactionList> {
               padding: const EdgeInsets.symmetric(vertical: 30),
               separatorBuilder: (context, index) => const Divider(color: Colors.transparent),
               itemBuilder: (context, index) {
+                if(transactionList.isEmpty){
+                  return const SizedBox();
+                }
                 if(index >= transactionList.length){
-                  return Container(
-                    padding: EdgeInsets.only(bottom: ratio*20),
-                    alignment: Alignment.center,
-                    child: const Center(
-                      child: CircularProgressIndicator()
-                    ),
-                  );
+                  if(transactionList.length >= 5){
+                    return Container(
+                      padding: EdgeInsets.only(bottom: ratio*20),
+                      alignment: Alignment.center,
+                      child: const Center(
+                        child: CircularProgressIndicator()
+                      ),
+                    );
+                  }
+                  return const SizedBox();
                 }
                 TransactionListItem transactionListItem = transactionList[index];
                 return ListTile(
@@ -169,7 +175,7 @@ class _TransactionListState extends State<TransactionList> {
                           ),
                           Container(
                             padding: EdgeInsets.symmetric(vertical: ratio*45),
-                            width: size.width*0.5,
+                            width: size.width*0.47,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -202,8 +208,10 @@ class _TransactionListState extends State<TransactionList> {
                             )
                           ),
                           Expanded(
-                            child: Center(child: Text('${transactionListItem.type == 0 || transactionListItem.receiver == transactionListItem.userId? 
-                                                        '+' : '-'}\$${transactionListItem.amount}'))
+                            child: Text('${transactionListItem.type == 0 || transactionListItem.receiver == transactionListItem.userId? 
+                                          '+' : '-'}\$${transactionListItem.amount}',
+                              textAlign: TextAlign.left,
+                            )
                           )
                         ],
                       )

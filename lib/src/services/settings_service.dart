@@ -28,7 +28,7 @@ class SettingsManagement extends SettingsService {
     var token = await Helpers.getCurrentToken();
     headers.addAll(<String, String>{"auth" : token.toString()});
     try {
-      final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/user/configs"), headers: headers);
+      final response = await http.get(Uri.parse("${dotenv.env['HOST']!}/api/user/configs"), headers: headers);
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body) as Map<String, dynamic>;
         var code = jsonData.entries.firstWhere((e) => e.key == 'code').value;
@@ -51,7 +51,7 @@ class SettingsManagement extends SettingsService {
     var token = await Helpers.getCurrentToken();
     headers.addAll(<String, String>{"auth" : token.toString()});
     try {
-      final response = await http.post(Uri.parse("${dotenv.env['HOST']!}api/$path"), headers: headers, body: config);
+      final response = await http.post(Uri.parse("${dotenv.env['HOST']!}/api/$path"), headers: headers, body: config);
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body) as Map<String, dynamic>;
         var code = jsonData.entries.firstWhere((e) => e.key == 'code').value;

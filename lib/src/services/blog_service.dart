@@ -25,8 +25,8 @@ class BlogManagement extends BlogService {
   Future<List<Blog>> getLatestBlogs() async {
     var token = await Helpers.getCurrentToken();
     headers.addAll(<String, String>{"auth" : token.toString()});
-    //final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/article/latest-blogs?limit=$param"));
-    final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/article/latest-blogs"), headers: headers);
+    //final response = await http.get(Uri.parse("${dotenv.env['HOST']!}/api/article/latest-blogs?limit=$param"));
+    final response = await http.get(Uri.parse("${dotenv.env['HOST']!}/api/article/latest-blogs"), headers: headers);
     if (response.statusCode == 200) {
       List<Blog> list = <Blog>[];
       for (var item in jsonDecode(response.body)) {
@@ -44,7 +44,7 @@ class BlogManagement extends BlogService {
     var token = await Helpers.getCurrentToken();
     headers.addAll(<String, String>{"auth" : token.toString()});
     try {
-      final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/article/cates/blogs"), headers: headers);
+      final response = await http.get(Uri.parse("${dotenv.env['HOST']!}/api/article/cates/blogs"), headers: headers);
       if (response.statusCode == 200) {
         for (var item in jsonDecode(response.body)){
           var blogs = <Blog>[];
@@ -68,7 +68,7 @@ class BlogManagement extends BlogService {
   Future<List<Blog>> getBlogsByCates(int cateId, int page) async {
     var token = await Helpers.getCurrentToken();
     headers.addAll(<String, String>{"auth" : token.toString()});
-    final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/articles?cateId=$cateId&page=$page"), headers: headers);
+    final response = await http.get(Uri.parse("${dotenv.env['HOST']!}/api/articles?cateId=$cateId&page=$page"), headers: headers);
     if (response.statusCode == 200) {
       List<Blog> list = <Blog>[];
       for (var item in jsonDecode(response.body)) {
@@ -85,7 +85,7 @@ class BlogManagement extends BlogService {
     var token = await Helpers.getCurrentToken();
     headers.addAll(<String, String>{"auth" : token.toString()});
     try {
-      final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/articles/detail?blogId=$blogId"), headers: headers);
+      final response = await http.get(Uri.parse("${dotenv.env['HOST']!}/api/articles/detail?blogId=$blogId"), headers: headers);
       if (response.statusCode == 200) {
         return Blog.fromJson(jsonDecode(response.body));
       } else {
@@ -104,7 +104,7 @@ class BlogManagement extends BlogService {
     headers.addAll(<String, String>{"auth" : token.toString()});
     try {
       if(search.isEmpty) return blogs;
-      final response = await http.get(Uri.parse("${dotenv.env['HOST']!}api/articles/search-results?search=$search&page=$page"), headers: headers);
+      final response = await http.get(Uri.parse("${dotenv.env['HOST']!}/api/articles/search-results?search=$search&page=$page"), headers: headers);
       if (response.statusCode == 200) {
         for(var item in jsonDecode(response.body)){
           blogs.add(Blog.fromJson(item));

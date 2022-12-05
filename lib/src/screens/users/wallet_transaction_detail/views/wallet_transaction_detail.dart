@@ -108,6 +108,7 @@ class _TransactionDetailBodyState extends State<TransactionDetailBody> {
                     Padding(
                       padding: EdgeInsets.only(top: ratio*20),
                       child: Text("${Helpers.toType(item.type).toUpperCase()} \$${item.amount}",
+                      textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Play', 
                           fontSize: ratio*55,
@@ -255,7 +256,7 @@ class _TransactionDetailBodyState extends State<TransactionDetailBody> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 15, left: 20, right: 20),
                 child: SizedBox(
-                  height: ratio*50,
+                  height: ratio*100,
                   width: double.infinity,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -267,12 +268,19 @@ class _TransactionDetailBodyState extends State<TransactionDetailBody> {
                           color: Colors.black
                         ),
                       ),
-                      Text('${item.bcaddress}',
-                        style: TextStyle(
-                          fontFamily: 'Play', 
-                          fontSize: ratio*35,
-                          color: Colors.black
-                        ),
+                      SizedBox(
+                        height: ratio*50,
+                        width: ratio*400,
+                        child: Text('${item.bcaddress}',
+                          textAlign: TextAlign.end,
+                          overflow: TextOverflow.visible,
+                          maxLines: 3,
+                          style: TextStyle(
+                            fontFamily: 'Play', 
+                            fontSize: ratio*35,
+                            color: Colors.black
+                          ),
+                        )
                       )
                     ],
                   )
