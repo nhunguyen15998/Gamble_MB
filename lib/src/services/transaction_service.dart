@@ -77,7 +77,7 @@ class TransactionManagement extends TransactionService {
   Future<Map<String, dynamic>> returnVNPayDespositResult(String url) async {
     Map<String, dynamic> result = <String, dynamic>{};
     try {
-      final response = await http.get(Uri.parse("${dotenv.env['HOST']!}$url"));
+      final response = await http.get(Uri.parse("${dotenv.env['HOST']!}/$url"));
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body) as Map<String, dynamic>;
         var code = jsonData.entries.firstWhere((e) => e.key == 'code').value;

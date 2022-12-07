@@ -81,6 +81,8 @@ class TransactionDetailBody extends StatefulWidget {
 }
 
 class _TransactionDetailBodyState extends State<TransactionDetailBody> {
+  String currency = "USD";
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -89,6 +91,14 @@ class _TransactionDetailBodyState extends State<TransactionDetailBody> {
     return BlocBuilder<WalletTransactionDetailBloc, WalletTransactionDetailState>(
       builder: (context, state) {
         TransactionItemDetail item = (state as WalletTransactionDetailLoaded).transactionItemDetail;
+        switch(item.type) {
+          case 0:
+            currency = item.status == 1 ? 'USD' : (item.status == 0 && item.method == 2 ? ' BTC' : ' VND');
+            break;
+          case 1: 
+            currency = item.status == 1 ? 'USD' : (item.status == 0 && item.method == 1 ? ' VND' : ' BTC');
+            break;
+        }
         return SingleChildScrollView(
           child: Column(
             children: [
@@ -161,7 +171,8 @@ class _TransactionDetailBodyState extends State<TransactionDetailBody> {
                           color: Colors.black
                         ),
                       ),
-                      Text('\$${item.amount}',
+                      Text(item.status == 1 || item.type == 2 ? 
+                                          '\$${item.amount}' : item.amount+currency,
                         style: TextStyle(
                           fontFamily: 'Play', 
                           fontSize: ratio*35,

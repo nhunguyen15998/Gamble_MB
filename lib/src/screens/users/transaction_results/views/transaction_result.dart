@@ -43,7 +43,7 @@ class _TransactionResultState extends State<TransactionResult> {
                       widget.image ?? const SizedBox(),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: ratio*50, vertical: ratio*30),
-                        child: Text(widget.text, style: widget.textStyle ?? const TextStyle(color: Colors.black))
+                        child: Text(widget.text, textAlign: TextAlign.center, style: widget.textStyle ?? const TextStyle(color: Colors.black))
                       )
                     ]
                   )

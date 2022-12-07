@@ -45,7 +45,7 @@ class TransactionListItem extends Equatable {
       receiver: json['receiver'],
       createdAt: DateFormat("dd/MM/yyyy").format(DateTime.parse(json['transaction_created_at'])).toString(),
       status: json['transaction_status'],
-      amount: NumberFormat.currency(customPattern: "#,###.", decimalDigits: 7).format(json['amount']),
+      amount: NumberFormat.currency(customPattern: "#,###.", decimalDigits: 7).format(json['transaction_status'] == 0 ? json['amount'] : json['received_amount']),
       name: json['first_name']+" "+json['last_name'],
       receiverName: json['receiver_first_name'] != null && json['receiver_last_name'] != null ? json['receiver_first_name']+" "+json['receiver_last_name'] : null,
     );

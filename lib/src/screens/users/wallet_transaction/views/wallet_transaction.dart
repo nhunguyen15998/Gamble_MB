@@ -71,6 +71,7 @@ class _TransactionListState extends State<TransactionList> {
   ScrollController scrollController = ScrollController();
   late WalletTransactionBloc walletTransactionBloc; 
   int page = 1;
+  String currency = "USD";
 
   scrollListener() {
     double pos = scrollController.position.pixels;
@@ -148,6 +149,14 @@ class _TransactionListState extends State<TransactionList> {
                   return const SizedBox();
                 }
                 TransactionListItem transactionListItem = transactionList[index];
+                switch(transactionListItem.type) {
+                  case 0:
+                    currency = transactionListItem.status == 1 ? 'USD' : (transactionListItem.status == 0 && transactionListItem.method == 2 ? ' BTC' : ' VND');
+                    break;
+                  case 1: 
+                    currency = transactionListItem.status == 1 ? 'USD' : (transactionListItem.status == 0 && transactionListItem.method == 1 ? ' VND' : ' BTC');
+                    break;
+                }
                 return ListTile(
                   title: GestureDetector(
                     onTap: () {
@@ -209,7 +218,8 @@ class _TransactionListState extends State<TransactionList> {
                           ),
                           Expanded(
                             child: Text('${transactionListItem.type == 0 || transactionListItem.receiver == transactionListItem.userId? 
-                                          '+' : '-'}\$${transactionListItem.amount}',
+                                          '+' : '-'} ${transactionListItem.status == 1 || transactionListItem.type == 2 ? 
+                                          '\$${transactionListItem.amount}' : transactionListItem.amount+currency}',
                               textAlign: TextAlign.left,
                             )
                           )

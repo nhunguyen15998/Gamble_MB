@@ -383,8 +383,8 @@ class _WheelBodyState extends State<WheelBody> {
                         ),
                         //result label
                         Positioned(
-                          left: ratio*295,
-                          top: ratio*340,
+                          left: ratio*265,
+                          top: ratio*290,
                           child: BlocBuilder<WheelBloc, WheelState>(
                             builder: (context, state) {
                               if(state is WheelInitialized){
@@ -477,7 +477,7 @@ class _WheelBodyState extends State<WheelBody> {
                                     () async {
                                       wheelBloc.add(WheelButtonsDisabled(isBtnDisabled: true));
                                       await _returnWheelResult(state.betAmount, isPartialBet);
-                                      betAmount.text = '';
+                                      // betAmount.text = '';
                                     } : null,
                                     child: Text('Spin'.toUpperCase(),
                                       style: TextStyle(
